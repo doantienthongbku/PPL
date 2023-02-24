@@ -1,0 +1,1 @@
+str = "a, b, c, d: integer = 3, 4, 6;"
