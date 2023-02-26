@@ -1,1 +1,1 @@
-Illegal Escape In String: This is a string containing tab \y
+_,.,12345,<EOF>

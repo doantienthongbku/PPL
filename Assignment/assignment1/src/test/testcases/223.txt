@@ -1,7 +1,10 @@
-main: function void () {
-            do {
-                printString("chao cau");
-                a = a + 1;
-            } while (i < 1);
-        }
-        
+
+                    countInteger : function integer (x: integer) {
+                        count : integer = 0;
+                        i: integer = 0;
+                        for (i = 0, i < 10, i + 1) {
+                            count = count + a[i];
+                        }
+                        return count;
+                    }    
+                

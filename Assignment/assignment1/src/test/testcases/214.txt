@@ -1,1 +1,1 @@
-foo: function integer (a: integer, out b: boolean) [inherit parent] {}
+a, b, c, d: integer = 3, 4, 5;

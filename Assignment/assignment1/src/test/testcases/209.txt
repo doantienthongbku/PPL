@@ -1,1 +1,12 @@
-foo: function integer (a: integer, out b: boolean) {}
+b,c: integer = 4,5;
+                i: integer;
+                main: function void () {
+                    a: array[3] of integer = 3;
+                    for (i = 0, i < 3, i + 1) {
+                        if (a[i] == b + c) {
+                            printString("a[i] = b + c");
+                        } else
+                            printString("a[i] != b + c");
+                    }
+                    return;
+                }

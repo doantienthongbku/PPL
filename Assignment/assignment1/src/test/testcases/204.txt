@@ -1,1 +1,3 @@
-delta: boolean = true;
+foo: function integer (a: integer, out b: boolean) [inherit parent] {
+                    a, b, c: string = 3, "hello", true;
+                    return a; 

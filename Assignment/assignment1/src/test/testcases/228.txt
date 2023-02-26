@@ -1,4 +1,5 @@
-main : function void () {
-                        
-                        return;
+
+                    main : function void () {
+                        a = 2::"abc";
                     }
+                

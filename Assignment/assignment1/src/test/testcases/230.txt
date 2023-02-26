@@ -1,3 +1,5 @@
-main : function void () {
-            a: array[3] of integer = {1 > 2, 2 + 10, 3};
-        }
+
+                    abcdefghijklmnopqrstuvw : function array [3] of integer () {
+                        return {1, 2, 3};
+                    }
+                

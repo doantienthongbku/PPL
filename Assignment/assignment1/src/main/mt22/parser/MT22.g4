@@ -16,7 +16,7 @@ options{
 
 // Literals
 typ: FLOAT | INTEGER | BOOLEAN | STRING | AUTO;	// one of 4 atomic types
-func_typ: typ | VOID | ARRAY;
+func_typ: typ | VOID | arraydecl;
 var_typ: typ | arraydecl;
 
 // array type
@@ -51,10 +51,7 @@ program: decllist EOF;
 decllist: decl decllist | decl;
 decl: vardecl | funcdecl ;
 
-// expression
-// exprlist: expr COMMA exprlist {self.expr_count += 1}
-// 		| expr {self.expr_count += 1};
-
+// expressions
 exprlist: expr COMMA {
 self.expr_count += 1
 if self.id_count == self.expr_count and self._input.LT(-1).text != ';':
@@ -107,16 +104,16 @@ arglistprime: expr COMMA arglistprime | expr;
 // Special functions
 spec_func: readInt | printInt | readFloat | printFloat| readBool 
 		 | printBool | readString | printString | superr | preventDefault;
-readInt: 'readInteger()' SEMI;
+readInt: 'readInteger' LB RB SEMI;
 printInt: 'printInteger' LB intVal RB SEMI;
-readFloat: 'readFloat()' SEMI;
+readFloat: 'readFloat' LB RB SEMI;
 printFloat: 'printFloat' LB floatVal RB SEMI;
-readBool: 'readBoolean()' SEMI;
+readBool: 'readBoolean' LB RB SEMI;
 printBool: 'printBoolean' LB boolVal RB SEMI;
-readString: 'readString()' SEMI;
+readString: 'readString' LB RB SEMI;
 printString: 'printString' LB stringVal RB SEMI;
 superr: 'super' LB exprlist RB SEMI;
-preventDefault: 'preventDefault()' SEMI;
+preventDefault: 'preventDefault' LB RB SEMI;
 
 intVal: ID | INTLIT | expr;
 floatVal: ID | FLOATLIT | expr;
@@ -125,7 +122,7 @@ boolVal: ID | boollit | expr;
 
 // comment
 BLOCK_COMMENT: '/*' .*? '*/' -> skip;
-LINE_COMMENT: '//' .*? [\r\n] -> skip;
+LINE_COMMENT: '//' .*? ~[\r\n]* -> skip;
 
 // Keywords
 AUTO: 'auto'; BREAK: 'break'; BOOLEAN: 'boolean';
@@ -159,8 +156,9 @@ INTLIT: '0'
 	  | [1-9] [0-9]* ('_' [0-9]+)* {self.text = self.text.replace('_', '')};
 FLOATLIT: INTLIT (DOT INTLIT?)? SCIENTIFIC {self.text = self.text.replace('_', '')}
 		| INTLIT DOT INTLIT? {self.text = self.text.replace('_', '')};
-		
-fragment SCIENTIFIC: [eE] [+-]? INTLIT;
+
+fragment SCIENTIFIC: [eE] [+-]? DIGIT;
+fragment DIGIT: [0-9]+;
 // STRINGLIT : '"' ( '\\' [btnfr"'\\] | ~[\r\n\\"] )* '"' {self.text = self.text[1:-1]};
 
 STRINGLIT: DoubleQuote ( StringChar*) DoubleQuote 

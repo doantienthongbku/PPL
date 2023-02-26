@@ -1,5 +1,6 @@
-foo: function integer (a: integer, out b: boolean) [inherit parent] {
-                a, b, c: string = 3, "hello", true;
-                foo(2 + x, 4.0 / y);
-                return a;
-            }
+
+                    main : function void () {
+                        a = a::b;
+                        return;
+                    }
+                

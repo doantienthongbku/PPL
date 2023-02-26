@@ -1,5 +1,8 @@
-foo: function integer (a: integer, out b: boolean) [inherit parent] {
-                a, b, c: string = 3, "hello", true;
-                
-                a = b + c;
-            }
+delta : integer = a;
+                foo : function integer (inherit out a: integer, out b: boolean) {
+                    a, b, c: string = 3, "hello", true;
+                    if (a == 3)
+                        return a + b;
+                    else
+                        return a > b;
+                }
