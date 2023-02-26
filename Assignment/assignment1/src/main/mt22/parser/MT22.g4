@@ -22,23 +22,24 @@ var_typ: typ | arraydecl;
 // array type
 arraylit: LP subarrayitem RP;
 subarrayitem: arritems | ;
-arritems: (INTLIT | FLOATLIT | STRINGLIT | BOOLLIT | arraylit) COMMA arritems 
-		| (INTLIT | FLOATLIT | STRINGLIT | BOOLLIT | arraylit);
+arritems: expr COMMA arritems | expr;
 
 arraydecl: ARRAY LS intlist RS OF typ;
 intlist: INTLIT COMMA intlist | INTLIT;
 
 // Variable declarations
-vardecl: idlist COLON var_typ (ASSIGN (exprlist | arraylit))? SEMI {
+vardecl: idlist COLON var_typ (ASSIGN exprlist)? SEMI {
 if self.id_count != self.expr_count and self.expr_count != 0:
 	raise SyntaxError("Error on line " + str(self._input.LT(-1).line) + 
 					  " col " + str(self._input.LT(-1).column) + ": " + self._input.LT(-1).text)
+self.id_count = 0
+self.expr_count = 0
 };
 // idlist
 idlist: ID COMMA {self.id_count += 1} idlist 
 	  | ID {self.id_count += 1};
 // function declaration
-funcdecl: ID COLON FUNCTION func_typ LB paramlist RB body;
+funcdecl: ID COLON FUNCTION func_typ LB paramlist RB (LS INHERIT ID RS)? block_stmt;
 // parameter declaration
 paramdecl: paramlist;
 paramlist: paramprime | ;
@@ -48,11 +49,20 @@ param: INHERIT? OUT? ID COLON typ;
 // program
 program: decllist EOF;
 decllist: decl decllist | decl;
-decl: vardecl | funcdecl;
+decl: vardecl | funcdecl ;
 
 // expression
 exprlist: expr COMMA exprlist {self.expr_count += 1}
 		| expr {self.expr_count += 1};
+
+// exprlist: expr COMMA {
+// self.expr_count += 1
+// if self.id_count == self.expr_count and self._input.LT(-1).text == ';':
+// 	raise SyntaxError("Error on line " + str(self._input.LT(-1).line) + 
+// 					  " col " + str(self._input.LT(-1).column) + ": " + self._input.LT(-1).text)
+// self.id_count = 0
+// self.expr_count = 0
+// } exprlist | expr {self.expr_count += 1};
 
 expr: expr1 CONCAT expr1 | expr1;
 expr1: expr2 OP_RELATIONAL expr2 | expr2;
@@ -61,11 +71,11 @@ expr3: expr3 (ADD | SUB) expr4 | expr4;
 expr4: expr4 OP_MUL expr5 | expr5;
 expr5: NOT expr5 | expr6;
 expr6: SUB expr6 | expr7;
-expr7: expr7 idx_op | expr8;
-expr8: subexpr | ID | INTLIT | FLOATLIT | BOOLLIT | STRINGLIT | callexpr;
+expr7: expr8 idx_op | expr8;
+expr8: subexpr | ID | INTLIT | FLOATLIT | boollit | STRINGLIT | callexpr | arraylit;
 
 subexpr: LB expr RB;
-idx_op: ID LS exprlist RS;
+idx_op: LS exprlist RS;
 callexpr: ID LB arglist RB;
 
 // type operators
@@ -73,23 +83,24 @@ OP_RELATIONAL: SMALLER | SMALLER_OR_EQUAL | GREATER | GREATER_OR_EQUAL
 			 | EQUAL | DIFF;
 OP_MUL: MUL | DIV | MOD;
 
-// body: 'body';
-body: LP stmtlist RP;
+// block_stmt: 'block_stmt';
+block_stmt: LP stmtlist RP;
 stmtlist: stmt stmtlist | ;
 stmt: vardecl | assignstmt | returnstmt | callstmt | ifstmt
 	| forstmt | whilestmt | dowhilestmt | breakstmt | spec_func
-	| continuestmt;
+	| continuestmt | block_stmt;
 
-block_stmt: body | stmt;
+scalar_var: ID | ID idx_op;
 // Statements
-assignstmt: (ID | idx_op) ASSIGN expr SEMI;
-ifstmt: IF LB expr RB block_stmt (ELSE block_stmt)?;
-forstmt: FOR LB ID EQUAL expr COMMA expr COMMA expr RB;
-whilestmt: WHILE LB expr RB block_stmt;
-dowhilestmt: DO block_stmt WHILE LB expr RB SEMI;
+lhs: scalar_var COMMA lhs | scalar_var;
+assignstmt: lhs ASSIGN expr SEMI;
+ifstmt: IF LB expr RB stmt (ELSE stmt)?;
+forstmt: FOR LB scalar_var ASSIGN expr COMMA expr COMMA expr RB stmt;
+whilestmt: WHILE LB expr RB stmt;
+dowhilestmt: DO stmt WHILE LB expr RB SEMI;
 breakstmt: BREAK SEMI;
 continuestmt: CONTINUE SEMI;
-returnstmt: RETURN expr SEMI;
+returnstmt: RETURN expr? SEMI;
 callstmt: ID LB arglist RB SEMI;
 arglist: arglistprime | ;
 arglistprime: expr COMMA arglistprime | expr;
@@ -111,7 +122,7 @@ preventDefault: 'preventDefault()' SEMI;
 intVal: ID | INTLIT;
 floatVal: ID | FLOATLIT;
 stringVal: ID | STRINGLIT;
-boolVal: ID | BOOLLIT | expr;
+boolVal: ID | boollit | expr;
 
 // comment
 BLOCK_COMMENT: '/*' .*? '*/' -> skip;
@@ -147,14 +158,19 @@ LB: '('; RB: ')'; LP: '{'; RP: '}'; LS: '['; RS: ']';
 // atomic types
 INTLIT: '0'
 	  | [1-9] [0-9]* ('_' [0-9]+)* {self.text = self.text.replace('_', '')};
-FLOATLIT: DIGIT_UNDERSCORE (DOT DIGIT_UNDERSCORE?)? SCIENTIFIC {self.text = self.text.replace('_', '')}
-		| DIGIT_UNDERSCORE DOT DIGIT_UNDERSCORE? {self.text = self.text.replace('_', '')};
-fragment DIGIT_UNDERSCORE: [0-9_]+;
-fragment SCIENTIFIC: [eE] [+-]? DIGIT_UNDERSCORE;
-// STRINGLIT: '"' ('\\' ["\\] | ~[" \\])* '"';
-STRINGLIT : '"' ( EscapeSequence | ~["\\] )* '"' {self.text = self.text[1:-1]};
-fragment EscapeSequence: '\\' ( 'b' | 'f' | 'r' | 'n' | 't' | '\'' | '\\' | '"' );
-BOOLLIT: TRUE | FALSE;
+FLOATLIT: INTLIT (DOT INTLIT?)? SCIENTIFIC {self.text = self.text.replace('_', '')}
+		| INTLIT DOT INTLIT? {self.text = self.text.replace('_', '')};
+// fragment DIGIT_UNDERSCORE: [0-9_]+;
+fragment SCIENTIFIC: [eE] [+-]? INTLIT;
+STRINGLIT : '"' ( '\\' [btnfr"'\\] | ~[\r\n\\"] )* '"' {self.text = self.text[1:-1]};
+// STRINGLIT: '"' Letters? '"' {self.text = self.text[1:-1]};
+// fragment Letters: Letter | Letter Letters;
+// fragment Letter: SpecialLetter | NormalLetter;
+// fragment SpecialLetter: '\\"' | '\\'[bfrnt'\\] ;
+// fragment NormalLetter: ~[\b\f\r\n\t"SQ] ;
+// fragment SQ: '\\'["];
+// fragment EscapeSequence: '\\' ( 'b' | 'f' | 'r' | 'n' | 't' | '\'' | '\\' | '"' );
+boollit: TRUE | FALSE;
 
 KEYWORD: AUTO | BREAK | BOOLEAN | DO | ELSE | FALSE | FLOAT | FOR | FUNCTION
 		| IF | INTEGER | RETURN | STRING | TRUE | WHILE | VOID | OUT
@@ -169,3 +185,23 @@ ERROR_CHAR: . {raise ErrorToken(self.text)};
 UNCLOSE_STRING: '"' {raise UncloseString(self.text)};
 ILLEGAL_ESCAPE: ESC_ILLEGAL {raise IllegalEscape(self.text)};
 fragment ESC_ILLEGAL: '\\' ~[btnfr"'\\] | ~'\\' ;
+UNTERMINATED_COMMENT: '/*' .*? {raise UnterminatedComment(self.text)};
+// ERROR_CHAR: . {raise ErrorToken(self.text)};
+// UNCLOSE_STRING: '"' Letters ('\n' | '\r' | '\f' | '\b' | '\t' | EOF)
+//     {
+//         my_str = self.text
+//         print(my_str[-1])
+//         esc_char = ['\n', '\r', '\f', '\b', '\t']
+//         if my_str[-1] in esc_char:
+//             raise UncloseString(my_str[1:-1])
+//         else:
+//             raise UncloseString(my_str[1:])
+//     };
+
+// //UNCLOSE_STRING: . {raise UncloseString(self.text[1:])};
+
+// ILLEGAL_ESCAPE: '"' Letters ( ~'\\' '\'' ~'"' | '\\' ~[bfrnt"\\] )
+//     {
+//         illEscString = self.text[1:]
+//         raise IllegalEscape(illEscString)
+//     };

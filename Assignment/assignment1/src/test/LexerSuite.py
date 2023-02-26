@@ -69,10 +69,10 @@ class LexerSuite(unittest.TestCase):
         expect = "he hh sjsk,<EOF>"
         self.assertTrue(TestLexer.test(input, expect, 113))
         
-    # def test14(self):
-    #     input = """ "He asked me: \\"Where is John?\\"" """
-    #     expect = """He asked me: \"Where is John?\",<EOF>"""
-    #     self.assertTrue(TestLexer.test(input, expect, 114))
+    def test14(self):
+        input = "123_"
+        expect = "123,_,<EOF>"
+        self.assertTrue(TestLexer.test(input, expect, 114))
         
     def test15(self):
         input = """ "This is a string containing tab \t" """
@@ -86,18 +86,20 @@ class LexerSuite(unittest.TestCase):
         
     def test17(self):
         input = """ "This is a string containing tab \\" """
-        expect = "This is a string containing tab \\,<EOF>"
+        expect = "Error Token \""
         self.assertTrue(TestLexer.test(input, expect, 117))
+
+    def test18(self):
+        input = "123.456E12"
+        expect = "123.456E12,<EOF>"
+        self.assertTrue(TestLexer.test(input, expect, 118))
         
-    # def test11(self):
-    #     input = ""
-    #     expect = ",<EOF>"
-    #     self.assertTrue(TestLexer.test(input, expect, 111))
+    def test19(self):
+        input = "/* comment *"
+        expect = "Unterminated Comment: /*"
+        self.assertTrue(TestLexer.test(input, expect, 119))
         
-    # def test11(self):
-    #     input = ""
-    #     expect = ",<EOF>"
-    #     self.assertTrue(TestLexer.test(input, expect, 111))
+
         
     # def test11(self):
     #     input = ""

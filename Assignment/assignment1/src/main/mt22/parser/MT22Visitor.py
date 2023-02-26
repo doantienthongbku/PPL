@@ -164,8 +164,8 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#body.
-    def visitBody(self, ctx:MT22Parser.BodyContext):
+    # Visit a parse tree produced by MT22Parser#block_stmt.
+    def visitBlock_stmt(self, ctx:MT22Parser.Block_stmtContext):
         return self.visitChildren(ctx)
 
 
@@ -179,8 +179,13 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#block_stmt.
-    def visitBlock_stmt(self, ctx:MT22Parser.Block_stmtContext):
+    # Visit a parse tree produced by MT22Parser#scalar_var.
+    def visitScalar_var(self, ctx:MT22Parser.Scalar_varContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#lhs.
+    def visitLhs(self, ctx:MT22Parser.LhsContext):
         return self.visitChildren(ctx)
 
 
@@ -311,6 +316,11 @@ class MT22Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MT22Parser#boolVal.
     def visitBoolVal(self, ctx:MT22Parser.BoolValContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#boollit.
+    def visitBoollit(self, ctx:MT22Parser.BoollitContext):
         return self.visitChildren(ctx)
 
 

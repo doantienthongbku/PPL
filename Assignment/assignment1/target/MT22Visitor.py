@@ -184,6 +184,11 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MT22Parser#scalar_var.
+    def visitScalar_var(self, ctx:MT22Parser.Scalar_varContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MT22Parser#assignstmt.
     def visitAssignstmt(self, ctx:MT22Parser.AssignstmtContext):
         return self.visitChildren(ctx)
@@ -311,6 +316,11 @@ class MT22Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MT22Parser#boolVal.
     def visitBoolVal(self, ctx:MT22Parser.BoolValContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#boollit.
+    def visitBoollit(self, ctx:MT22Parser.BoollitContext):
         return self.visitChildren(ctx)
 
 
