@@ -85,8 +85,8 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.test(input, expect, 116))
         
     def test17(self):
-        input = """ "This is a string containing tab \\" """
-        expect = "Error Token \""
+        input = """ "This is a string containing tab \t" """
+        expect = """This is a string containing tab 	,<EOF>"""
         self.assertTrue(TestLexer.test(input, expect, 117))
 
     def test18(self):
@@ -95,13 +95,21 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.test(input, expect, 118))
         
     def test19(self):
-        input = """ "This is a string containing tab \n" """
-        expect = ",<EOF>"
+        input = """ "This is a string containing tab \\y hehe" """
+        expect = "Illegal Escape In String: This is a string containing tab \y"
         self.assertTrue(TestLexer.test(input, expect, 119))
-    
-    
         
-
+    def test20(self):
+        input = """ "This is a string containing tab \\ hehe" """
+        expect = "Illegal Escape In String: This is a string containing tab \ "
+        self.assertTrue(TestLexer.test(input, expect, 120))
+        
+    def test21(self):
+        input = """ "This is a unclosed string hehe"""
+        expect = "Unclosed String: This is a unclosed string hehe"
+        self.assertTrue(TestLexer.test(input, expect, 121))
+    
+    
         
     # def test11(self):
     #     input = ""

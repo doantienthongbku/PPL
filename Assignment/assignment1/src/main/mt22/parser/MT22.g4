@@ -159,48 +159,40 @@ INTLIT: '0'
 	  | [1-9] [0-9]* ('_' [0-9]+)* {self.text = self.text.replace('_', '')};
 FLOATLIT: INTLIT (DOT INTLIT?)? SCIENTIFIC {self.text = self.text.replace('_', '')}
 		| INTLIT DOT INTLIT? {self.text = self.text.replace('_', '')};
-// fragment DIGIT_UNDERSCORE: [0-9_]+;
+		
 fragment SCIENTIFIC: [eE] [+-]? INTLIT;
-STRINGLIT : '"' ( '\\' [btnfr"'\\] | ~[\r\n\\"] )* '"' {self.text = self.text[1:-1]};
-// STRINGLIT: '"' Letters? '"' {self.text = self.text[1:-1]};
-// fragment Letters: Letter | Letter Letters;
-// fragment Letter: SpecialLetter | NormalLetter;
-// fragment SpecialLetter: '\\"' | '\\'[bfrnt'\\] ;
-// fragment NormalLetter: ~[\b\f\r\n\t"SQ] ;
-// fragment SQ: '\\'["];
-// fragment EscapeSequence: '\\' ( 'b' | 'f' | 'r' | 'n' | 't' | '\'' | '\\' | '"' );
+// STRINGLIT : '"' ( '\\' [btnfr"'\\] | ~[\r\n\\"] )* '"' {self.text = self.text[1:-1]};
+
+STRINGLIT: DoubleQuote ( StringChar*) DoubleQuote 
+{ 
+	result = str(self.text)
+	self.text = self.text[1:-1]
+};
+fragment StringChar: ~[\f\r\n"\\] | EscapeSequence;
+fragment EscapeSequence: '\\' [bfrnt"'\\];
+fragment IllegalString: '\\' ~[bfrnt"'\\] | '\\';
+fragment DoubleQuote: '"';
+
 boollit: TRUE | FALSE;
 
-KEYWORD: AUTO | BREAK | BOOLEAN | DO | ELSE | FALSE | FLOAT | FOR | FUNCTION
-		| IF | INTEGER | RETURN | STRING | TRUE | WHILE | VOID | OUT
-		| CONTINUE | OF | INHERIT | ARRAY;
 // identifier
 ID: [a-zA-Z_]  [a-zA-Z_0-9]*;// {if self.text in KEYWORD: raise IllegalIdentifier(self.text)};
 
 
 WS : [ \t\r\n\b\f]+ -> skip ; // skip spaces, tabs, newlines
 
-ERROR_CHAR: . {raise ErrorToken(self.text)};
-UNCLOSE_STRING: '"' {raise UncloseString(self.text)};
-ILLEGAL_ESCAPE: ESC_ILLEGAL {raise IllegalEscape(self.text)};
-fragment ESC_ILLEGAL: '\\' ~[btnfr"'\\] | ~'\\' ;
-UNTERMINATED_COMMENT: '/*' .*? {raise UnterminatedComment(self.text)};
-// ERROR_CHAR: . {raise ErrorToken(self.text)};
-// UNCLOSE_STRING: '"' Letters ('\n' | '\r' | '\f' | '\b' | '\t' | EOF)
-//     {
-//         my_str = self.text
-//         print(my_str[-1])
-//         esc_char = ['\n', '\r', '\f', '\b', '\t']
-//         if my_str[-1] in esc_char:
-//             raise UncloseString(my_str[1:-1])
-//         else:
-//             raise UncloseString(my_str[1:])
-//     };
-
-// //UNCLOSE_STRING: . {raise UncloseString(self.text[1:])};
-
-// ILLEGAL_ESCAPE: '"' Letters ( ~'\\' '\'' ~'"' | '\\' ~[bfrnt"\\] )
-//     {
-//         illEscString = self.text[1:]
-//         raise IllegalEscape(illEscString)
-//     };
+ERROR_CHAR: . { raise ErrorToken(self.text) };
+UNCLOSE_STRING: DoubleQuote StringChar* ([\f\n\r"\\] | EOF)
+{
+	unclose_str = str(self.text)
+	possible = ['\f', '\n', '\r', '"', '\\']
+	if unclose_str[-1] in possible:
+		raise UncloseString(unclose_str[1:-1])
+	else:
+		raise UncloseString(unclose_str[1:])
+};
+ILLEGAL_ESCAPE: DoubleQuote StringChar* IllegalString 
+{
+	illegal_str = str(self.text)
+	raise IllegalEscape(illegal_str[1:]) 
+} ;
