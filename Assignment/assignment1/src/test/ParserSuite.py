@@ -14,7 +14,7 @@ class ParserSuite(unittest.TestCase):
         self.assertTrue(TestParser.test(input, expect, 202))
     def test3(self):
         input = """delta: integer = 3, 4;"""
-        expect = "Error on line 1 col 21: ;"
+        expect = "Error on line 1 col 18: ,"
         self.assertTrue(TestParser.test(input, expect, 203))
     def test4(self):
         input = """delta: boolean = true;"""
@@ -241,7 +241,7 @@ class ParserSuite(unittest.TestCase):
         input = """main : function void () {
             a,b,c : integer = 1,2,3,4;
         }"""
-        expect = "Error on line 2 col 37: ;"
+        expect = "Error on line 2 col 35: ,"
         self.assertTrue(TestParser.test(input, expect, 231))
     def test32(self):
         input = """main : function void () {
@@ -252,6 +252,15 @@ class ParserSuite(unittest.TestCase):
         }"""
         expect = "successful"
         self.assertTrue(TestParser.test(input, expect, 232))
+    def test33(self):
+        input = """main : function void () {
+            a: array[2, 2] of integer = {{1, 2}, {3, 4}};
+            printInteger(a[1, 1]);
+            
+            return;
+        }"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 233))
     
     # Test special function
     

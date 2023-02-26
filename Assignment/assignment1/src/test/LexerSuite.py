@@ -95,9 +95,11 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.test(input, expect, 118))
         
     def test19(self):
-        input = "/* comment *"
-        expect = "Unterminated Comment: /*"
+        input = """ "This is a string containing tab \n" """
+        expect = ",<EOF>"
         self.assertTrue(TestLexer.test(input, expect, 119))
+    
+    
         
 
         

@@ -52,17 +52,17 @@ decllist: decl decllist | decl;
 decl: vardecl | funcdecl ;
 
 // expression
-exprlist: expr COMMA exprlist {self.expr_count += 1}
-		| expr {self.expr_count += 1};
+// exprlist: expr COMMA exprlist {self.expr_count += 1}
+// 		| expr {self.expr_count += 1};
 
-// exprlist: expr COMMA {
-// self.expr_count += 1
-// if self.id_count == self.expr_count and self._input.LT(-1).text == ';':
-// 	raise SyntaxError("Error on line " + str(self._input.LT(-1).line) + 
-// 					  " col " + str(self._input.LT(-1).column) + ": " + self._input.LT(-1).text)
-// self.id_count = 0
-// self.expr_count = 0
-// } exprlist | expr {self.expr_count += 1};
+exprlist: expr COMMA {
+self.expr_count += 1
+if self.id_count == self.expr_count and self._input.LT(-1).text != ';':
+	raise SyntaxError("Error on line " + str(self._input.LT(-1).line) + 
+					  " col " + str(self._input.LT(-1).column) + ": " + self._input.LT(-1).text)
+	self.id_count = 0
+	self.expr_count = 0
+} exprlist | expr {self.expr_count += 1};
 
 expr: expr1 CONCAT expr1 | expr1;
 expr1: expr2 OP_RELATIONAL expr2 | expr2;
@@ -92,8 +92,7 @@ stmt: vardecl | assignstmt | returnstmt | callstmt | ifstmt
 
 scalar_var: ID | ID idx_op;
 // Statements
-lhs: scalar_var COMMA lhs | scalar_var;
-assignstmt: lhs ASSIGN expr SEMI;
+assignstmt: scalar_var ASSIGN expr SEMI;
 ifstmt: IF LB expr RB stmt (ELSE stmt)?;
 forstmt: FOR LB scalar_var ASSIGN expr COMMA expr COMMA expr RB stmt;
 whilestmt: WHILE LB expr RB stmt;
@@ -119,9 +118,9 @@ printString: 'printString' LB stringVal RB SEMI;
 superr: 'super' LB exprlist RB SEMI;
 preventDefault: 'preventDefault()' SEMI;
 
-intVal: ID | INTLIT;
-floatVal: ID | FLOATLIT;
-stringVal: ID | STRINGLIT;
+intVal: ID | INTLIT | expr;
+floatVal: ID | FLOATLIT | expr;
+stringVal: ID | STRINGLIT | expr;
 boolVal: ID | boollit | expr;
 
 // comment

@@ -184,11 +184,6 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#lhs.
-    def visitLhs(self, ctx:MT22Parser.LhsContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MT22Parser#assignstmt.
     def visitAssignstmt(self, ctx:MT22Parser.AssignstmtContext):
         return self.visitChildren(ctx)
