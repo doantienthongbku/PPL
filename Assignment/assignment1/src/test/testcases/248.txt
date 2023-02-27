@@ -1,0 +1,8 @@
+delta : integer = a;
+                foo : function integer (inherit out a: integer, out b: boolean) {
+                    a, b, c: string = 3, "hello", true;
+                    if (a == 3)
+                        return a + b;
+                    else
+                        return a > b;
+                }

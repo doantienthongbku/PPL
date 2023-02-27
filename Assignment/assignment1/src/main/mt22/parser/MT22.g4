@@ -148,23 +148,24 @@ OP_FLOAT:ADD | SUB | MUL | DIV | EQUAL | DIFF
 OP_STRING: CONCAT;
 
 // Seperators
-COMMA: ','; DOT: '.'; SEMI: ';'; ASSIGN: '='; COLON: ':';
+COMMA: ','; SEMI: ';'; ASSIGN: '='; COLON: ':'; DOT: '.';
 LB: '('; RB: ')'; LP: '{'; RP: '}'; LS: '['; RS: ']';
 
 // atomic types
 INTLIT: '0'
 	  | [1-9] [0-9]* ('_' [0-9]+)* {self.text = self.text.replace('_', '')};
-FLOATLIT: INTLIT (DOT INTLIT?)? SCIENTIFIC {self.text = self.text.replace('_', '')}
-		| INTLIT DOT INTLIT? {self.text = self.text.replace('_', '')};
 
-fragment SCIENTIFIC: [eE] [+-]? DIGIT;
-fragment DIGIT: [0-9]+;
-// STRINGLIT : '"' ( '\\' [btnfr"'\\] | ~[\r\n\\"] )* '"' {self.text = self.text[1:-1]};
+FLOATLIT: (DIGIT_UNDERSCORE DECIMAL? SCIENTIFIC 
+		| DIGIT_UNDERSCORE DECIMAL SCIENTIFIC?
+		| DIGIT_UNDERSCORE? DECIMAL SCIENTIFIC) {self.text = self.text.replace('_', '')};
+fragment DIGIT_UNDERSCORE: [0-9]+ ('_' [0-9]+)*;
+fragment SCIENTIFIC: [eE] [+-]? [0-9]+;
+fragment DECIMAL: '.' [0-9]*;
 
 STRINGLIT: DoubleQuote ( StringChar*) DoubleQuote 
 { 
 	result = str(self.text)
-	self.text = self.text[1:-1]
+	self.text = result[1:-1]
 };
 fragment StringChar: ~[\f\r\n"\\] | EscapeSequence;
 fragment EscapeSequence: '\\' [bfrnt"'\\];
@@ -174,11 +175,12 @@ fragment DoubleQuote: '"';
 boollit: TRUE | FALSE;
 
 // identifier
-ID: [a-zA-Z_]  [a-zA-Z_0-9]*;// {if self.text in KEYWORD: raise IllegalIdentifier(self.text)};
+ID: [a-zA-Z_]  [a-zA-Z_0-9]*;
 
 
 WS : [ \t\r\n\b\f]+ -> skip ; // skip spaces, tabs, newlines
 
+// Error handling
 ERROR_CHAR: . { raise ErrorToken(self.text) };
 UNCLOSE_STRING: DoubleQuote StringChar* ([\f\n\r"\\] | EOF)
 {

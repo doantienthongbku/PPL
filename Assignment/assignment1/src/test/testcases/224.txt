@@ -1,7 +1,4 @@
-
-                    foo : function string (x : integer) {}
-                    goo : function float (i: integer) {}
-                    hoo : function integer (z: integer) {
-                        goo(foo(hoo(3)));
-                    } 
-                
+foo : function string (x : integer) {
+                        if (x == 0) return "a";
+                        else return foo(x - 1);
+                   }

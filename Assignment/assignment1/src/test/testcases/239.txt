@@ -1,6 +1,1 @@
-
-                    main : function void () {
-                        a = _abcbda[2,3,4,5,6,7,8,9] + 2 / 3 :: "abc";
-                        return a;
-                    }    
-                
+a?bc : integer = 1;

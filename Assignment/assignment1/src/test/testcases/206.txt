@@ -1,2 +1,1 @@
-a: integer = 3;
-                    a = b + c;
+a, b, c: string = 3, "hello";

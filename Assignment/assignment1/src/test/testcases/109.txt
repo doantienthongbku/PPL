@@ -1,1 +1,1 @@
-1_234.567_89e-3_4
+ "He asked me: Where is " 

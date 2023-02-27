@@ -1,13 +1,2 @@
-
-                    foo : function void (x : integer) {
-                        x = 3;
-                        while (x < 10) {
-                            x = x + 1;
-                        }
-                        if (x == 10) {
-                            continue;
-                        }
-                        printString(x);
-                        return true;
-                    }
-                
+ a: integer = 3;
+                    a = b + c;

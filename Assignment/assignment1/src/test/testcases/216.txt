@@ -1,4 +1,6 @@
-foo : function string (x : integer) {}
-                    main : function void () {
-                        return foo(3);
-                    }
+ a: integer = 3;
+        main: function void () {
+            b: integer = 4;
+            sum: integer = a + b;
+            printInteger(sum);
+        }

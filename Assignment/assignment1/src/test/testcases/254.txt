@@ -1,0 +1,9 @@
+foo : function string (x : integer) {}
+                    main : function void () {
+                        a[0,0] = 4;
+                        do {
+                            a[0,0] = a[3] + 1;
+                        }
+                        while (a[0,0] < 10);    
+                        return foo();
+                    }

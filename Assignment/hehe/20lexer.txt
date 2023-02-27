@@ -1,0 +1,80 @@
+ def test181(self):
+        input = """=="""
+        expect = """==,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 181))
+    def test182(self):
+        input = """ === """
+        expect = """==,=,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 182))
+    def test183(self):
+        input = """ === """
+        expect = """==,=,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 183))
+    def test184(self):
+        input = """ ///"""
+        expect = """<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 184))
+    def test185(self):
+        input = """ "abc""def" """
+        expect = """abc,def,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 185))
+    def test186(self):
+        input = """ if a == b: return c;"""
+        expect = """if,a,==,b,:,return,c,;,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 186))
+    def test187(self):
+        input = """ 1__2 """
+        expect = """1,__2,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 187))
+    def test188(self):
+        input = """ _1__2 """
+        expect = """_1__2,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 188))
+    def test189(self):
+        input = """ 1__2 """
+        expect = """1,__2,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 189))
+    def test190(self):
+        input = """ / """
+        expect = """/,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 190))
+    def test191(self):
+        input = """ "\'" """
+        expect = """Error Token \""""
+        self.assertTrue(TestLexer.test(input, expect, 191))
+    def test192(self):
+        input = """ "\\'" """
+        expect = """\\',<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 192))
+    def test193(self):
+        input = """ a = {{1,2,3}, {{}}}; """
+        expect = """a,=,{,{,1,,,2,,,3,},,,{,{,},},},;,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 193))
+    def test194(self):
+        input = """ <<==>> """
+        expect = """<,<=,=,>,>,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 194))
+    def test195(self):
+        input = """ ::::: """
+        expect = """::,::,:,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 195))
+    def test196(self):
+        input = """ <<=>=>> """
+        expect = """<,<=,>=,>,>,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 196))
+    def test197(self):
+        input = """ dout """
+        expect = """dout,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 197))
+    def test198(self):
+        input = """ writeInt(i); """
+        expect = """writeInt,(,i,),;,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 198))
+    def test199(self):
+        input = """ func : function integer (out a : auto) {}"""
+        expect = "func,:,function,integer,(,out,a,:,auto,),{,},<EOF>"
+        self.assertTrue(TestLexer.test(input, expect, 199))
+    def test200(self):
+        input = """printFloat(a); """
+        expect = """printFloat,(,a,),;,<EOF>"""
+        self.assertTrue(TestLexer.test(input, expect, 200))

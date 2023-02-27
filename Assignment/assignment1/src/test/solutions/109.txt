@@ -1,1 +1,1 @@
-1234.56789e-34,<EOF>
+He asked me: Where is ,<EOF>

@@ -1,5 +1,3 @@
-
-                    abcdefghijklmnopqrstuvw : function string (inherit out x: integer) {
-                        return "\n";
-                    }
-                
+main : function void () {
+            a,b,c : integer = 1,2,3,4;
+        }

@@ -1,9 +1,7 @@
-foo : function string (x : integer) {}
-                    main : function void () {
-                        a[3] = 4;
-                        do {
-                            a[3] = a[3] + 1;
-                        }
-                        while (a[3] < 10);    
-                        return foo(a[3]);
-                    }
+ a: integer = 3;
+        main: function void () {
+            b: integer = 4;
+            sum: integer = a + b;
+            printInteger(sum);
+            return;
+        }
