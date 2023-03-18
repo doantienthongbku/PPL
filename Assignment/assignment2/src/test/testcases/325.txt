@@ -1,0 +1,10 @@
+
+                    foo: function string (x : string) {
+                        x = x :: "abc";
+                        return x;
+                    }
+                    main : function void () {
+                        a: string = foo("abcd");
+                        return;
+                    }
+                

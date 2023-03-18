@@ -239,3 +239,103 @@ main: function void () {
 	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([2, 2], IntegerType), ArrayLit([ArrayLit([IntegerLit(1), IntegerLit(2)]), ArrayLit([IntegerLit(3), IntegerLit(4)])])), CallStmt(printInteger, ArrayCell(Id(a), [IntegerLit(1), IntegerLit(1)])), VarDecl(b, IntegerType, IntegerLit(3)), VarDecl(c, IntegerType, BinExpr(+, Id(b), ArrayCell(Id(a), [IntegerLit(1), IntegerLit(1)]))), CallStmt(printInteger, c), ReturnStmt()]))
 ])"""
         self.assertTrue(TestAST.test(input, expect, 315))
+    
+            
+    def test17(self):
+        input = """
+                    foo : function string (x : integer) {
+                        i: integer = 0;
+                        for (i = 0, i < 10, i + 1) {
+                            x = x + i;
+                        }
+                        return x;
+                    }
+                    goo : function integer (x : integer) {
+                        if ((x % 2) == 0)
+                            return x;
+                        else {
+                            return x + 1;
+                        }
+                    }
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        a[0] = foo(4) + 5;
+                        b: array [3] of integer = {goo(1), goo(2), goo(3)};
+                        
+                        return;
+                    }    
+                """
+        expect = """Program([
+	FuncDecl(foo, StringType, [Param(x, IntegerType)], None, BlockStmt([VarDecl(i, IntegerType, IntegerLit(0)), ForStmt(AssignStmt(i, IntegerLit(0)), BinExpr(<, Id(i), IntegerLit(10)), BinExpr(+, Id(i), IntegerLit(1)), BlockStmt([AssignStmt(Id(x), BinExpr(+, Id(x), Id(i)))])), ReturnStmt(Id(x))]))
+	FuncDecl(goo, IntegerType, [Param(x, IntegerType)], None, BlockStmt([IfStmt(BinExpr(==, BinExpr(%, Id(x), IntegerLit(2)), IntegerLit(0)), ReturnStmt(Id(x)), BlockStmt([ReturnStmt(BinExpr(+, Id(x), IntegerLit(1)))]))]))
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), AssignStmt(ArrayCell(a, [IntegerLit(0)]), BinExpr(+, FuncCall(foo, [IntegerLit(4)]), IntegerLit(5))), VarDecl(b, ArrayType([3], IntegerType), ArrayLit([FuncCall(goo, [IntegerLit(1)]), FuncCall(goo, [IntegerLit(2)]), FuncCall(goo, [IntegerLit(3)])])), ReturnStmt()]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 316))
+        
+    def test18(self):
+        input = """
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        
+                        a[2] = -a[1] * 2;
+                        c: boolean = !(a[2] > 0);
+                        printBoolean(c);
+                        
+                        return;
+                    }    
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), AssignStmt(ArrayCell(a, [IntegerLit(2)]), BinExpr(*, UnExpr(-, ArrayCell(Id(a), [IntegerLit(1)])), IntegerLit(2))), VarDecl(c, BooleanType, UnExpr(!, BinExpr(>, ArrayCell(Id(a), [IntegerLit(2)]), IntegerLit(0)))), CallStmt(printBoolean, c), ReturnStmt()]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 317))
+        
+    def test19(self):
+        input = """foo: function integer (x: integer) {
+            return x + 1;
+        }
+        main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        
+                        a[2] = -a[1] * 2 + foo(3);
+                        c: boolean = !(a[2] > foo(3));
+                        printBoolean(c);
+                        
+                        return;
+                    }    
+        """
+        expect = """Program([
+	FuncDecl(foo, IntegerType, [Param(x, IntegerType)], None, BlockStmt([ReturnStmt(BinExpr(+, Id(x), IntegerLit(1)))]))
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), AssignStmt(ArrayCell(a, [IntegerLit(2)]), BinExpr(+, BinExpr(*, UnExpr(-, ArrayCell(Id(a), [IntegerLit(1)])), IntegerLit(2)), FuncCall(foo, [IntegerLit(3)]))), VarDecl(c, BooleanType, UnExpr(!, BinExpr(>, ArrayCell(Id(a), [IntegerLit(2)]), FuncCall(foo, [IntegerLit(3)])))), CallStmt(printBoolean, c), ReturnStmt()]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 318))
+        
+
+    # =================================================================================
+    # test statement
+    # =================================================================================
+    def test20(self):
+        input = """
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        foo(4);
+                    }    
+                    foo : function string (x : integer) {
+                        foo(3);
+                        main();
+                    }
+                    goo : function integer (x : integer) {
+                        goo(3);
+                        main();
+                    }
+                    hoo : function float (x : integer) {
+                        hoo(3);
+                        main();
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), CallStmt(foo, IntegerLit(4))]))
+	FuncDecl(foo, StringType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(foo, IntegerLit(3)), CallStmt(main, )]))
+	FuncDecl(goo, IntegerType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(goo, IntegerLit(3)), CallStmt(main, )]))
+	FuncDecl(hoo, FloatType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(hoo, IntegerLit(3)), CallStmt(main, )]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 319))

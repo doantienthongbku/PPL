@@ -1,0 +1,4 @@
+Program([
+	FuncDecl(foo, IntegerType, [Param(x, IntegerType)], None, BlockStmt([ReturnStmt(BinExpr(+, Id(x), IntegerLit(1)))]))
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), AssignStmt(ArrayCell(a, [IntegerLit(2)]), BinExpr(+, BinExpr(*, UnExpr(-, ArrayCell(Id(a), [IntegerLit(1)])), IntegerLit(2)), FuncCall(foo, [IntegerLit(3)]))), VarDecl(c, BooleanType, UnExpr(!, BinExpr(>, ArrayCell(Id(a), [IntegerLit(2)]), FuncCall(foo, [IntegerLit(3)])))), CallStmt(printBoolean, c), ReturnStmt()]))
+])

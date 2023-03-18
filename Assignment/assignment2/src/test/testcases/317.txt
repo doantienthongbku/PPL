@@ -1,0 +1,11 @@
+
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        
+                        a[2] = -a[1] * 2;
+                        c: boolean = !(a[2] > 0);
+                        printBoolean(c);
+                        
+                        return;
+                    }    
+                

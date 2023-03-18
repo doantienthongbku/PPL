@@ -1,0 +1,11 @@
+
+                    bubbleSort : function array [3] of integer (arr: array [3] of integer) {
+                        for (i = 0, i < n, i + 1) {
+                            for (j = 0, j < n - i - 1, j + 1) {
+                                if (arr[j] > arr[j + 1]) {
+                                    swap(arr[j], arr[j + 1]);
+                                }
+                            }
+                        }
+                    }
+                

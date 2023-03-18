@@ -1,18 +1,23 @@
 
-                    main : function void () {
-                        a: array [3] of integer = {1,2,3};
-                        foo(4);
-                    }    
                     foo : function string (x : integer) {
-                        foo(3);
-                        main();
+                        i: integer = 0;
+                        for (i = 0, i < 10, i + 1) {
+                            x = x + i;
+                        }
+                        return x;
                     }
                     goo : function integer (x : integer) {
-                        goo(3);
-                        main();
+                        if ((x % 2) == 0)
+                            return x;
+                        else {
+                            return x + 1;
+                        }
                     }
-                    hoo : function float (x : integer) {
-                        hoo(3);
-                        main();
-                    }
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        a[0] = foo(4) + 5;
+                        b: array [3] of integer = {goo(1), goo(2), goo(3)};
+                        
+                        return;
+                    }    
                 

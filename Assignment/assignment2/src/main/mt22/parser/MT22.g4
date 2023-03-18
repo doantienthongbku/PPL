@@ -24,7 +24,7 @@ funcdecl: ID COLON FUNCTION func_typ LB paramlist RB (INHERIT ID)? block_stmt;
 // parameter declaration
 paramlist: paramprime | ;
 paramprime: param COMMA paramprime | param;
-param: INHERIT? OUT? ID COLON typ;
+param: INHERIT? OUT? ID COLON var_typ;
 
 // block_stmt
 block_stmt: LP stmtlist RP;

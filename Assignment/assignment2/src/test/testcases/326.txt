@@ -1,0 +1,7 @@
+
+                    main : function void () {
+                        a: integer = readInteger();
+                        printInteger(a + 10 - 5 * 2 / 2);
+                        return;
+                    }
+                

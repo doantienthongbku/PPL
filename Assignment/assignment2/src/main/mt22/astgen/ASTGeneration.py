@@ -56,10 +56,10 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#param.
-    # param: INHERIT? OUT? ID COLON typ;
+    # param: INHERIT? OUT? ID COLON var_typ;
     def visitParam(self, ctx:MT22Parser.ParamContext):
         name = ctx.ID().getText()
-        typ = self.visit(ctx.typ())
+        typ = self.visit(ctx.var_typ())
         out = True if ctx.OUT() else False
         inherit = True if ctx.INHERIT() else False
         return ParamDecl(name, typ, out, inherit)
@@ -126,7 +126,7 @@ class ASTGeneration(MT22Visitor):
     # Visit a parse tree produced by MT22Parser#forstmt.
     # forstmt: FOR LB scalar_var ASSIGN expr COMMA expr COMMA expr RB stmt;
     def visitForstmt(self, ctx:MT22Parser.ForstmtContext):
-        init = AssignStmt(ctx.scalar_var().getText(), self.visit(ctx.expr(0)))
+        init = AssignStmt(self.visit(ctx.scalar_var()), self.visit(ctx.expr(0)))
         cond = self.visit(ctx.expr(1))
         upd = self.visit(ctx.expr(2))
         stmt = self.visit(ctx.stmt())
@@ -171,7 +171,7 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#callstmt.
-    # callstmt: ID LB arglist RB SEMI;
+    # callexpr: ID LB arglist RB | spec_func;
     def visitCallstmt(self, ctx:MT22Parser.CallstmtContext):
         name = ctx.ID().getText()
         arglist = self.visit(ctx.arglist())

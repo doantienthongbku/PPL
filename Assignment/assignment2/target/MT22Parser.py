@@ -98,7 +98,7 @@ def serializedATN():
         buf.write("\u00ab\3\2\2\2\u00ac\u00ad\3\2\2\2\u00ad\u00af\3\2\2\2")
         buf.write("\u00ae\u00b0\7\37\2\2\u00af\u00ae\3\2\2\2\u00af\u00b0")
         buf.write("\3\2\2\2\u00b0\u00b1\3\2\2\2\u00b1\u00b2\7E\2\2\u00b2")
-        buf.write("\u00b3\7:\2\2\u00b3\u00b4\5~@\2\u00b4\17\3\2\2\2\u00b5")
+        buf.write("\u00b3\7:\2\2\u00b3\u00b4\5x=\2\u00b4\17\3\2\2\2\u00b5")
         buf.write("\u00b6\7>\2\2\u00b6\u00b7\5\22\n\2\u00b7\u00b8\7?\2\2")
         buf.write("\u00b8\21\3\2\2\2\u00b9\u00ba\5\24\13\2\u00ba\u00bb\5")
         buf.write("\22\n\2\u00bb\u00be\3\2\2\2\u00bc\u00be\3\2\2\2\u00bd")
@@ -835,8 +835,8 @@ class MT22Parser ( Parser ):
         def COLON(self):
             return self.getToken(MT22Parser.COLON, 0)
 
-        def typ(self):
-            return self.getTypedRuleContext(MT22Parser.TypContext,0)
+        def var_typ(self):
+            return self.getTypedRuleContext(MT22Parser.Var_typContext,0)
 
 
         def INHERIT(self):
@@ -885,7 +885,7 @@ class MT22Parser ( Parser ):
             self.state = 176
             self.match(MT22Parser.COLON)
             self.state = 177
-            self.typ()
+            self.var_typ()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
