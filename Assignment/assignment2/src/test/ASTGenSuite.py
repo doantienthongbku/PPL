@@ -225,14 +225,44 @@ main: function void () {
         self.assertTrue(TestAST.test(input, expect, 314))
         
     def test16(self):
-        input = """
-        main : function void () {
-            a: array[2, 2] of integer = {{1, 2}, {3, 4}};
-            b: integer = 3;
-            c: integer = b + a;
-            printInteger(c);
-
-            return;
-        }"""
-        expect = """"""
+        input = """main : function void () {
+                        a: array[2, 2] of integer = {{1, 2}, {3, 4}};
+                        printInteger(a[1, 1]);
+                        b: integer = 3;
+                        c: integer = b + a[1, 1];
+                        printInteger(c);
+                        
+                        return;
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([2, 2], IntegerType), ArrayLit([ArrayLit([IntegerLit(1), IntegerLit(2)]), ArrayLit([IntegerLit(3), IntegerLit(4)])])), CallStmt(printInteger, ArrayCell(Id(a), [IntegerLit(1), IntegerLit(1)])), VarDecl(b, IntegerType, IntegerLit(3)), VarDecl(c, IntegerType, BinExpr(+, Id(b), ArrayCell(Id(a), [IntegerLit(1), IntegerLit(1)]))), CallStmt(printInteger, c), ReturnStmt()]))
+])"""
         self.assertTrue(TestAST.test(input, expect, 315))
+        
+    def test17(self):
+        input = """
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        foo(4);
+                    }    
+                    foo : function string (x : integer) {
+                        foo(3);
+                        main();
+                    }
+                    goo : function integer (x : integer) {
+                        goo(3);
+                        main();
+                    }
+                    hoo : function float (x : integer) {
+                        hoo(3);
+                        main();
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), CallStmt(foo, IntegerLit(4))]))
+	FuncDecl(foo, StringType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(foo, IntegerLit(3)), CallStmt(main, )]))
+	FuncDecl(goo, IntegerType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(goo, IntegerLit(3)), CallStmt(main, )]))
+	FuncDecl(hoo, FloatType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(hoo, IntegerLit(3)), CallStmt(main, )]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 316))

@@ -326,19 +326,49 @@ class ASTGeneration(MT22Visitor):
     #         return [VarDecl(names[i], typ, inits) for i in range(len(names))]
     
     # Visit a parse tree produced by MT22Parser#vardecl.
+    # vardecl: (helper | notassign) SEMI;
     def visitVardecl(self, ctx:MT22Parser.VardeclContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#basecase.
-    def visitBasecase(self, ctx:MT22Parser.BasecaseContext):
-        return self.visitChildren(ctx)
+        if ctx.notassign():
+            return self.visit(ctx.notassign())
+        else:
+            list_vardecl = self.visit(ctx.helper())
+            assert len(list_vardecl) % 2 != 0
+            typ = list_vardecl[-1]
+            list_vardecl = list_vardecl[:-1]
+            list_name = list_vardecl[::2]
+            list_expr = list_vardecl[1::2]
+            list_expr.reverse()
+            
+            return [VarDecl(list_name[i], typ, list_expr[i]) for i in range(len(list_name))]
 
 
     # Visit a parse tree produced by MT22Parser#helper.
+    # helper: ID COMMA helper COMMA expr | basecase; 
     def visitHelper(self, ctx:MT22Parser.HelperContext):
-        return self.visitChildren(ctx)    
+        if ctx.basecase():
+            typ, pair = self.visit(ctx.basecase())  # typ, [name, expr]
+            return pair + [typ]
+        else:
+            name = ctx.ID().getText()
+            expr = self.visit(ctx.expr())
+            return [name, expr] + self.visit(ctx.helper())
 
+
+    # Visit a parse tree produced by MT22Parser#basecase.
+    # basecase: ID COLON var_typ ASSIGN expr;
+    def visitBasecase(self, ctx:MT22Parser.BasecaseContext):
+        name = ctx.ID().getText()
+        typ = self.visit(ctx.var_typ())
+        expr = self.visit(ctx.expr())
+        return typ, [name, expr]
+
+
+    # Visit a parse tree produced by MT22Parser#notassign.
+    # notassign: idlist COLON var_typ;
+    def visitNotassign(self, ctx:MT22Parser.NotassignContext):
+        names = self.visit(ctx.idlist())
+        typ = self.visit(ctx.var_typ())
+        return [VarDecl(names[i], typ) for i in range(len(names))]
 
     # Visit a parse tree produced by MT22Parser#scalar_var.
     # scalar_var: ID | ID idx_op;
@@ -472,8 +502,7 @@ class ASTGeneration(MT22Visitor):
             return [self.visit(ctx.expr())] + self.visit(ctx.arglistprime())
 
     # Visit a parse tree produced by MT22Parser#idlist.
-    # idlist: ID COMMA {self.id_count += 1} idlist 
-	#       | ID {self.id_count += 1};
+    # idlist: ID COMMA idlist | ID;
     def visitIdlist(self, ctx:MT22Parser.IdlistContext):
         if ctx.getChildCount() == 1:
             return [ctx.ID().getText()]

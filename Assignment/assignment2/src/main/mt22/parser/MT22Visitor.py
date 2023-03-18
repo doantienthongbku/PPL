@@ -184,13 +184,18 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MT22Parser#helper.
+    def visitHelper(self, ctx:MT22Parser.HelperContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MT22Parser#basecase.
     def visitBasecase(self, ctx:MT22Parser.BasecaseContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#helper.
-    def visitHelper(self, ctx:MT22Parser.HelperContext):
+    # Visit a parse tree produced by MT22Parser#notassign.
+    def visitNotassign(self, ctx:MT22Parser.NotassignContext):
         return self.visitChildren(ctx)
 
 

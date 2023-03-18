@@ -5,10 +5,10 @@ grammar MT22;
 from lexererr import *
 }
 
-@parser::members {
-id_count = 0
-expr_count = 0
-}
+// @parser::members {
+// id_count = 0
+// expr_count = 0
+// }
 
 options{
 	language=Python3;
@@ -64,26 +64,16 @@ stringVal: ID | STRINGLIT | expr;
 boolVal: ID | boollit | expr;
 
 // Variable declarations
-vardecl: idlist COLON var_typ (ASSIGN exprlist)? SEMI {
-if self.id_count != self.expr_count and self.expr_count != 0:
-	raise SyntaxError("Error on line " + str(self._input.LT(-1).line) + 
-					  " col " + str(self._input.LT(-1).column) + ": " + self._input.LT(-1).text)
-self.id_count = 0
-self.expr_count = 0
-};
+vardecl: (helper | notassign) SEMI;
+helper: ID COMMA helper COMMA expr | basecase; 
+basecase: ID COLON var_typ ASSIGN expr;
+notassign: idlist COLON var_typ;
 
 // scalar variable
 scalar_var: ID | ID idx_op;
 
 // expressions
-exprlist: expr COMMA {
-self.expr_count += 1
-if self.id_count == self.expr_count and self._input.LT(-1).text != ';':
-	raise SyntaxError("Error on line " + str(self._input.LT(-1).line) + 
-					  " col " + str(self._input.LT(-1).column) + ": " + self._input.LT(-1).text)
-	self.id_count = 0
-	self.expr_count = 0
-} exprlist | expr {self.expr_count += 1};
+exprlist: expr COMMA exprlist | expr;
 
 expr: expr1 CONCAT expr1 | expr1;
 expr1: expr2 op_relational expr2 | expr2;
@@ -103,8 +93,7 @@ arglist: arglistprime | ;
 arglistprime: expr COMMA arglistprime | expr;
 
 // idlist
-idlist: ID COMMA {self.id_count += 1} idlist 
-	  | ID {self.id_count += 1};
+idlist: ID COMMA idlist | ID;
 
 // array type
 arraylit: LP subarrayitem RP;

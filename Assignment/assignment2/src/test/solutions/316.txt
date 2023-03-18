@@ -1,0 +1,6 @@
+Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(1), IntegerLit(2), IntegerLit(3)])), CallStmt(foo, IntegerLit(4))]))
+	FuncDecl(foo, StringType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(foo, IntegerLit(3)), CallStmt(main, )]))
+	FuncDecl(goo, IntegerType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(goo, IntegerLit(3)), CallStmt(main, )]))
+	FuncDecl(hoo, FloatType, [Param(x, IntegerType)], None, BlockStmt([CallStmt(hoo, IntegerLit(3)), CallStmt(main, )]))
+])

@@ -4,6 +4,9 @@ from AST import *
 
 
 class ASTGenSuite(unittest.TestCase):
+    # =================================================================================
+    # test general
+    # =================================================================================
     def test1(self):
         input = """x: integer;"""
         expect = str(Program([VarDecl("x", IntegerType())]))
@@ -128,7 +131,7 @@ main: function void () {
 	VarDecl(b, IntegerType, IntegerLit(4))
 	VarDecl(c, IntegerType, IntegerLit(5))
 	VarDecl(i, IntegerType)
-	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), IntegerLit(3)), ForStmt(AssignStmt(i, IntegerLit(0)), BinExpr(<, Id(i), IntegerLit(3)), BinExpr(+, Id(i), IntegerLit(1)), BlockStmt([IfStmt(BinExpr(==, ArrayCell(Id(a), [Id(i)]), BinExpr(+, Id(b), Id(c))), BlockStmt([CallStmt(printString, StringLit(a[i] = b + c))]), CallStmt(printString, StringLit(a[i] != b + c)))])), ReturnStmt()]))
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([3], IntegerType), ArrayLit([IntegerLit(3)])), ForStmt(AssignStmt(i, IntegerLit(0)), BinExpr(<, Id(i), IntegerLit(3)), BinExpr(+, Id(i), IntegerLit(1)), BlockStmt([IfStmt(BinExpr(==, ArrayCell(Id(a), [Id(i)]), BinExpr(+, Id(b), Id(c))), BlockStmt([CallStmt(printString, StringLit(a[i] = b + c))]), CallStmt(printString, StringLit(a[i] != b + c)))])), ReturnStmt()]))
 ])"""
         self.assertTrue(TestAST.test(input, expect, 309))
         
@@ -146,3 +149,93 @@ main: function void () {
 	FuncDecl(foo, IntegerType, [InheritOutParam(a, IntegerType), OutParam(b, BooleanType)], None, BlockStmt([VarDecl(a, StringType, IntegerLit(3)), VarDecl(b, StringType, StringLit(hello)), VarDecl(c, StringType, BooleanLit(True)), IfStmt(BinExpr(==, Id(a), IntegerLit(3)), ReturnStmt(BinExpr(+, Id(a), Id(b))), ReturnStmt(BinExpr(>, Id(a), Id(b))))]))
 ])"""
         self.assertTrue(TestAST.test(input, expect, 310))
+        
+    def test12(self):
+        input = """
+                    foo : function void (x : integer) {
+                        x = 3;
+                        while (x < 10) {
+                            x = x + 1;
+                        }
+                        if (x == 10) {
+                            continue;
+                        }
+                        printString(x);
+                        return true;
+                    }
+                """
+        expect = """Program([
+	FuncDecl(foo, VoidType, [Param(x, IntegerType)], None, BlockStmt([AssignStmt(Id(x), IntegerLit(3)), WhileStmt(BinExpr(<, Id(x), IntegerLit(10)), BlockStmt([AssignStmt(Id(x), BinExpr(+, Id(x), IntegerLit(1)))])), IfStmt(BinExpr(==, Id(x), IntegerLit(10)), BlockStmt([ContinueStmt()])), CallStmt(printString, x), ReturnStmt(BooleanLit(True))]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 311))
+        
+    # =================================================================================
+    # test expression
+    # =================================================================================
+    def test13(self):
+        input = """
+                    main : function void () {
+                        a = 3 + 2 - b[1] * 2 / 3;
+                        return;
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([AssignStmt(Id(a), BinExpr(-, BinExpr(+, IntegerLit(3), IntegerLit(2)), BinExpr(/, BinExpr(*, ArrayCell(Id(b), [IntegerLit(1)]), IntegerLit(2)), IntegerLit(3)))), ReturnStmt()]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 312))
+        
+    def test14(self):
+        input = """
+                    main : function void () {
+                        a: string = "hello";
+                        b: string = " world";
+                        
+                        c: string = a :: b;
+                        printString(c);
+                        
+                        return;
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, StringType, StringLit(hello)), VarDecl(b, StringType, StringLit( world)), VarDecl(c, StringType, BinExpr(::, Id(a), Id(b))), CallStmt(printString, c), ReturnStmt()]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 313))
+        
+    def test15(self):
+        # test relational operator
+        input = """
+                    main : function integer () {
+                        a: boolean = true;
+                        b: boolean = false;
+                        c: integer = 3;
+                        d: integer = 4;
+                        
+                        if ((a == b) && (c > d)) {
+                            printString("a == b and c > d");
+                            return a;
+                        } else
+                            return b;
+                        
+                        return 0;
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, IntegerType, [], None, BlockStmt([VarDecl(a, BooleanType, BooleanLit(True)), VarDecl(b, BooleanType, BooleanLit(False)), VarDecl(c, IntegerType, IntegerLit(3)), VarDecl(d, IntegerType, IntegerLit(4)), IfStmt(BinExpr(&&, BinExpr(==, Id(a), Id(b)), BinExpr(>, Id(c), Id(d))), BlockStmt([CallStmt(printString, StringLit(a == b and c > d)), ReturnStmt(Id(a))]), ReturnStmt(Id(b))), ReturnStmt(IntegerLit(0))]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 314))
+        
+    def test16(self):
+        input = """main : function void () {
+                        a: array[2, 2] of integer = {{1, 2}, {3, 4}};
+                        printInteger(a[1, 1]);
+                        b: integer = 3;
+                        c: integer = b + a[1, 1];
+                        printInteger(c);
+                        
+                        return;
+                    }
+                """
+        expect = """Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, ArrayType([2, 2], IntegerType), ArrayLit([ArrayLit([IntegerLit(1), IntegerLit(2)]), ArrayLit([IntegerLit(3), IntegerLit(4)])])), CallStmt(printInteger, ArrayCell(Id(a), [IntegerLit(1), IntegerLit(1)])), VarDecl(b, IntegerType, IntegerLit(3)), VarDecl(c, IntegerType, BinExpr(+, Id(b), ArrayCell(Id(a), [IntegerLit(1), IntegerLit(1)]))), CallStmt(printInteger, c), ReturnStmt()]))
+])"""
+        self.assertTrue(TestAST.test(input, expect, 315))
