@@ -1,0 +1,9 @@
+
+        main : function void () {
+            a: string = "abc";
+            b: string = "abc";
+            c: string;
+            c = a::b;
+            
+            return;
+            }

@@ -1,0 +1,16 @@
+
+                    main : function integer () {
+                        a: boolean = true;
+                        b: boolean = false;
+                        c: integer = 3;
+                        d: integer = 4;
+                        
+                        if ((a == b) && (c > d)) {
+                            printString("a == b and c > d");
+                            return a;
+                        } else
+                            return b;
+                        
+                        return 0;
+                    }
+                

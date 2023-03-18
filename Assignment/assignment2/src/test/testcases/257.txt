@@ -1,0 +1,4 @@
+foo : function string (x : integer) {
+                        else return foo(x - 1);
+                   }     
+                

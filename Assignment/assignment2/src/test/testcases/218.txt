@@ -1,0 +1,11 @@
+ a: integer = 3;
+        main: function void () {
+            if (a == 3) 
+                printString("a = 3");
+            else {
+                printString("a != 3");
+                printString("you are wrong");
+            }
+            
+            return;
+        }

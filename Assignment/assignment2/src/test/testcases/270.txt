@@ -1,0 +1,6 @@
+
+                    main : function void () {
+                        /* comment */// comment
+                        a = (2 >= 3) && (4 < 5);
+                    }
+                

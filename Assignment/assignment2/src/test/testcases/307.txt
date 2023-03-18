@@ -1,0 +1,3 @@
+a: array[3] of integer;
+        c: float = 4;
+        b: array[3] of integer = {1, 2, 3};

@@ -1,0 +1,18 @@
+
+                    main : function void () {
+                        a: array [3] of integer = {1,2,3};
+                        foo(4);
+                    }    
+                    foo : function string (x : integer) {
+                        foo(3);
+                        main();
+                    }
+                    goo : function integer (x : integer) {
+                        goo(3);
+                        main();
+                    }
+                    hoo : function float (x : integer) {
+                        hoo(3);
+                        main();
+                    }
+                

@@ -1,0 +1,11 @@
+
+                    main : function void () {
+                        a: string = "hello";
+                        b: string = " world";
+                        
+                        c: string = a :: b;
+                        printString(c);
+                        
+                        return;
+                    }
+                

@@ -1,0 +1,5 @@
+
+                    main : function boolean (i : integer) {
+                        return (!i && (!!!i || !!!!i));
+                    }
+                

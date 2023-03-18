@@ -1,0 +1,4 @@
+foo : function string (x : integer) {}
+                    main : function void () {
+                        return foo(3);
+                    }

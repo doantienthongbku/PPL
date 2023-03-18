@@ -1,0 +1,1 @@
+variable a: INTEGER := 1;
