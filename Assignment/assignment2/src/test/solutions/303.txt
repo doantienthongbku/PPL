@@ -1,3 +1,6 @@
 Program([
-	FuncDecl(main, VoidType, [], None, BlockStmt([]))
+	FuncDecl(abc, IntegerType, [Param(a, IntegerType)], None, BlockStmt([]))
+	FuncDecl(def, IntegerType, [Param(a, ArrayType([3], IntegerType))], abc, BlockStmt([]))
+	FuncDecl(ghi, ArrayType([1, 2], BooleanType), [OutParam(n, IntegerType)], None, BlockStmt([]))
+	FuncDecl(klm, ArrayType([1, 2], StringType), [InheritOutParam(a, ArrayType([3], IntegerType)), Param(n, IntegerType)], ghi, BlockStmt([]))
 ])

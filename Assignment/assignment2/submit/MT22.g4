@@ -24,13 +24,13 @@ funcdecl: ID COLON FUNCTION func_typ LB paramlist RB (INHERIT ID)? block_stmt;
 // parameter declaration
 paramlist: paramprime | ;
 paramprime: param COMMA paramprime | param;
-param: INHERIT? OUT? ID COLON typ;
+param: INHERIT? OUT? ID COLON var_typ;
 
 // block_stmt
 block_stmt: LP stmtlist RP;
 stmtlist: stmt stmtlist | ;
 stmt: vardecl | assignstmt | returnstmt | callstmt | ifstmt
-	| forstmt | whilestmt | dowhilestmt | breakstmt | spec_func
+	| forstmt | whilestmt | dowhilestmt | breakstmt | spec_func_stmt	
 	| continuestmt | block_stmt;
 
 // Statements
@@ -45,15 +45,15 @@ returnstmt: RETURN expr? SEMI;
 callstmt: ID LB arglist RB SEMI;
 
 // Special functions
-spec_func: readInt | printInt | readFloat | printFloat| readBool 
-		 | printBool | readString | printString | superr | preventDefault;
-readInt: 'readInteger' LB RB SEMI;
+spec_func_stmt: printInt | printFloat | printBool | printString | superr | preventDefault;
+spec_func_expr: readInt | readFloat | readBool | readString;
+readInt: 'readInteger' LB RB;
 printInt: 'printInteger' LB intVal RB SEMI;
-readFloat: 'readFloat' LB RB SEMI;
+readFloat: 'readFloat' LB RB;
 printFloat: 'printFloat' LB floatVal RB SEMI;
-readBool: 'readBoolean' LB RB SEMI;
+readBool: 'readBoolean' LB RB;
 printBool: 'printBoolean' LB boolVal RB SEMI;
-readString: 'readString' LB RB SEMI;
+readString: 'readString' LB RB;
 printString: 'printString' LB stringVal RB SEMI;
 superr: 'super' LB exprlist RB SEMI;
 preventDefault: 'preventDefault' LB RB SEMI;
@@ -83,7 +83,7 @@ expr4: expr4 op_mul expr5 | expr5;
 expr5: NOT expr5 | expr6;
 expr6: SUB expr6 | expr7;
 expr7: expr8 idx_op | expr8;
-expr8: subexpr | ID | INTLIT | FLOATLIT | boollit | STRINGLIT | callexpr | arraylit;
+expr8: subexpr | ID | INTLIT | FLOATLIT | boollit | STRINGLIT | callexpr | arraylit | spec_func_expr;
 
 subexpr: LB expr RB;
 idx_op: LS exprlist RS;

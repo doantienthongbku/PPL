@@ -1,3 +1,0 @@
-Program([
-	FuncDecl(main, VoidType, [], None, BlockStmt([AssignStmt(ArrayCell(a, [BinExpr(+, IntegerLit(1), IntegerLit(1)), BinExpr(>, Id(a), Id(b)), IntegerLit(2), IntegerLit(3), IntegerLit(4)]), IntegerLit(0)), DoWhileStmt(BinExpr(<=, ArrayCell(Id(a), [BinExpr(+, IntegerLit(1), IntegerLit(1)), BinExpr(>, Id(a), Id(b)), IntegerLit(2), IntegerLit(3), IntegerLit(4)]), IntegerLit(10)), BlockStmt([ContinueStmt()])), ReturnStmt()]))
-])

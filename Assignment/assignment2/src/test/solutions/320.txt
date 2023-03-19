@@ -1,3 +1,6 @@
 Program([
-	FuncDecl(main, VoidType, [], None, BlockStmt([DoWhileStmt(BinExpr(<, Id(i), IntegerLit(1)), BlockStmt([CallStmt(printString, StringLit(chao cau)), AssignStmt(Id(a), BinExpr(+, Id(a), IntegerLit(1)))]))]))
+	VarDecl(a1, StringType, StringLit(Hello ))
+	VarDecl(a2, StringType, StringLit(World!))
+	VarDecl(a, StringType, BinExpr(::, Id(a1), Id(a2)))
+	VarDecl(a, StringType, BinExpr(::, BinExpr(::, Id(a), BinExpr(::, Id(a), StringLit(a))), Id(a)))
 ])

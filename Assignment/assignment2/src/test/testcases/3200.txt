@@ -1,0 +1,7 @@
+
+            s: float = 5.5e4;
+            main: function void () {
+                s = s/7;
+                printFloat(s);
+            }
+        

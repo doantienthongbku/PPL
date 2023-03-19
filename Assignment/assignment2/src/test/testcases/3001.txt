@@ -1,0 +1,10 @@
+
+        inc : function void (out n : integer, delta : integer){
+            n = n + delta;
+            b : float;
+            a : integer;
+            for(i = 1, i < n, i+1){
+                return 0;
+            }
+        }
+        

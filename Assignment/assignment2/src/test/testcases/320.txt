@@ -1,7 +1,5 @@
-main: function void () {
-            do {
-                printString("chao cau");
-                a = a + 1;
-            } while (i < 1);
-        }
+
+        a1, a2 : string = "Hello ", "World!" ;
+        a: string = a1 :: a2 ;            
+        a: string = (a :: ( a :: "a" ) ) :: a;        
         

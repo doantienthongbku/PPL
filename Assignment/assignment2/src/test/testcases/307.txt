@@ -1,3 +1,51 @@
-a: array[3] of integer;
-        c: float = 4;
-        b: array[3] of integer = {1, 2, 3};
+
+            n : float = a+1;
+            a, b, c: boolean;
+            p, q : integer = 1, 2;
+            arrayA : array[4] of integer = {1, 2, 3, 4};
+            arr2 : array[2, 3] of float = {{.3E-34, 2, 1.52}, {.123e-10, 5.E-2, 6.22}};
+            empty_function123_263827 : function void(test : boolean, test_array : array[4,7,8] of integer) {}
+            main : function void() {
+                x = a() + b()*c(d);
+                if (x < a(arr[0,i])) return;
+                x = x / max(x,y+sub(x-y));
+                for (i = 1, i < n , i/2) {
+                    {
+                        k : integer = 0;
+                        k = i;
+                        if (k < 10 ) break;
+                    }
+                }
+                print("The result is ",x);
+            }
+            func : function float(out animal: string, num: integer){
+                animal = "this is a string";
+                i, j, ans, n : integer;
+                n = 10;
+                for (i = 1, i <= n, i + 1) 
+                    for ( j = n, j <i , j -1){
+                        ans = ans + (i*j*arrayA[i]);
+                    }
+                return ans;
+            }
+            Car: function void (a: float, b: integer, out c:float) {
+                for (i = 1, i <= n, i + 1) 
+                    if (i==2)
+                        continue;
+                    else c = a[c+1];
+                    while (false) {
+                        if (j>=5) break;
+                        s = add(2,3,4,5);
+                        printInteger(s);
+                    }
+                return ans;
+            }
+            Vinfast: function void(inherit b: integer) inherit Car{
+                runStraight(number, vecl, auto_stmt);
+                do {
+                    a = a - 1; 
+                    printInteger(a);
+                }
+                while(a > 0);
+            }
+        

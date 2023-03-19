@@ -104,8 +104,13 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#spec_func.
-    def visitSpec_func(self, ctx:MT22Parser.Spec_funcContext):
+    # Visit a parse tree produced by MT22Parser#spec_func_stmt.
+    def visitSpec_func_stmt(self, ctx:MT22Parser.Spec_func_stmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#spec_func_expr.
+    def visitSpec_func_expr(self, ctx:MT22Parser.Spec_func_exprContext):
         return self.visitChildren(ctx)
 
 

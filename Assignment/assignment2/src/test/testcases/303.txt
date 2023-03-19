@@ -1,2 +1,6 @@
-main: function void () {
-        }
+
+        abc: function integer(a: integer){}
+        def: function integer(a: array[3] of integer) inherit abc{}
+        ghi: function array[1,2] of boolean (out n: integer) {}
+        klm: function array[1,2] of string (inherit out a: array[3] of integer, n: integer) inherit ghi {}
+        

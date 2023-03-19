@@ -1,4 +1,0 @@
-Program([
-	FuncDecl(foo, StringType, [Param(x, StringType)], None, BlockStmt([AssignStmt(Id(x), BinExpr(::, Id(x), StringLit(abc))), ReturnStmt(Id(x))]))
-	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a, StringType, FuncCall(foo, [StringLit(abcd)])), ReturnStmt()]))
-])

@@ -1,0 +1,11 @@
+
+            add: function integer(n: integer){
+                sum: integer = 0;
+                for (i = 0, i<=n, i+1){
+                    sum = sum + i;
+                    delta: integer = add(10);
+                    printInteger(delta);
+                }
+                return sum;
+            }
+        

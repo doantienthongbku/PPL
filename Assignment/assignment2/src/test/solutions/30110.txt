@@ -1,0 +1,3 @@
+Program([
+	FuncDecl(main, VoidType, [], None, BlockStmt([VarDecl(a1, StringType, StringLit(Hello )), VarDecl(a2, StringType, StringLit(World!)), VarDecl(mn, StringType, StringLit(Good))]))
+])

@@ -56,10 +56,10 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#param.
-    # param: INHERIT? OUT? ID COLON typ;
+    # param: INHERIT? OUT? ID COLON var_typ;
     def visitParam(self, ctx:MT22Parser.ParamContext):
         name = ctx.ID().getText()
-        typ = self.visit(ctx.typ())
+        typ = self.visit(ctx.var_typ())
         out = True if ctx.OUT() else False
         inherit = True if ctx.INHERIT() else False
         return ParamDecl(name, typ, out, inherit)
@@ -86,7 +86,7 @@ class ASTGeneration(MT22Visitor):
 
     # Visit a parse tree produced by MT22Parser#stmt.
     # stmt: vardecl | assignstmt | returnstmt | callstmt | ifstmt
-	#     | forstmt | whilestmt | dowhilestmt | breakstmt | spec_func
+	#     | forstmt | whilestmt | dowhilestmt | breakstmt | spec_func_stmt
 	#     | continuestmt | block_stmt;
     def visitStmt(self, ctx:MT22Parser.StmtContext):
         if ctx.vardecl(): return self.visit(ctx.vardecl())
@@ -100,7 +100,7 @@ class ASTGeneration(MT22Visitor):
         elif ctx.breakstmt(): return self.visit(ctx.breakstmt())
         elif ctx.continuestmt(): return self.visit(ctx.continuestmt())
         elif ctx.block_stmt(): return self.visit(ctx.block_stmt())
-        elif ctx.spec_func(): return self.visit(ctx.spec_func())
+        elif ctx.spec_func_stmt(): return self.visit(ctx.spec_func_stmt())
 
 
     # Visit a parse tree produced by MT22Parser#assignstmt.
@@ -126,7 +126,7 @@ class ASTGeneration(MT22Visitor):
     # Visit a parse tree produced by MT22Parser#forstmt.
     # forstmt: FOR LB scalar_var ASSIGN expr COMMA expr COMMA expr RB stmt;
     def visitForstmt(self, ctx:MT22Parser.ForstmtContext):
-        init = AssignStmt(ctx.scalar_var().getText(), self.visit(ctx.expr(0)))
+        init = AssignStmt(self.visit(ctx.scalar_var()), self.visit(ctx.expr(0)))
         cond = self.visit(ctx.expr(1))
         upd = self.visit(ctx.expr(2))
         stmt = self.visit(ctx.stmt())
@@ -171,7 +171,7 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#callstmt.
-    # callstmt: ID LB arglist RB SEMI;
+    # callexpr: ID LB arglist RB | spec_func;
     def visitCallstmt(self, ctx:MT22Parser.CallstmtContext):
         name = ctx.ID().getText()
         arglist = self.visit(ctx.arglist())
@@ -181,24 +181,42 @@ class ASTGeneration(MT22Visitor):
     # Visit a parse tree produced by MT22Parser#spec_func.
     # spec_func: readInt | printInt | readFloat | printFloat| readBool 
 	#          | printBool | readString | printString | superr | preventDefault;
-    def visitSpec_func(self, ctx:MT22Parser.Spec_funcContext):
-        if ctx.readInt(): return self.visit(ctx.readInt())
-        elif ctx.printInt(): return self.visit(ctx.printInt())
-        elif ctx.readFloat(): return self.visit(ctx.readFloat())
+    # def visitSpec_func(self, ctx:MT22Parser.Spec_funcContext):
+    #     if ctx.readInt(): return self.visit(ctx.readInt())
+    #     elif ctx.printInt(): return self.visit(ctx.printInt())
+    #     elif ctx.readFloat(): return self.visit(ctx.readFloat())
+    #     elif ctx.printFloat(): return self.visit(ctx.printFloat())
+    #     elif ctx.readBool(): return self.visit(ctx.readBool())
+    #     elif ctx.printBool(): return self.visit(ctx.printBool())
+    #     elif ctx.readString(): return self.visit(ctx.readString())
+    #     elif ctx.printString(): return self.visit(ctx.printString())
+    #     elif ctx.superr(): return self.visit(ctx.superr())
+    #     elif ctx.preventDefault(): return self.visit(ctx.preventDefault())
+    
+    # Visit a parse tree produced by MT22Parser#spec_func_stmt.
+    # spec_func_stmt: printInt | printFloat | printBool | printString | superr | preventDefault;
+    def visitSpec_func_stmt(self, ctx:MT22Parser.Spec_func_stmtContext):
+        if ctx.printInt(): return self.visit(ctx.printInt())
         elif ctx.printFloat(): return self.visit(ctx.printFloat())
-        elif ctx.readBool(): return self.visit(ctx.readBool())
         elif ctx.printBool(): return self.visit(ctx.printBool())
-        elif ctx.readString(): return self.visit(ctx.readString())
         elif ctx.printString(): return self.visit(ctx.printString())
         elif ctx.superr(): return self.visit(ctx.superr())
         elif ctx.preventDefault(): return self.visit(ctx.preventDefault())
 
 
+    # Visit a parse tree produced by MT22Parser#spec_func_expr.
+    def visitSpec_func_expr(self, ctx:MT22Parser.Spec_func_exprContext):
+        if ctx.readInt(): return self.visit(ctx.readInt())
+        elif ctx.readFloat(): return self.visit(ctx.readFloat())
+        elif ctx.readBool(): return self.visit(ctx.readBool())
+        elif ctx.readString(): return self.visit(ctx.readString())
+
+
     # Visit a parse tree produced by MT22Parser#readInt.
-    # readInt: 'readInteger' LB RB SEMI;
+    # readInt: 'readInteger' LB RB;
     def visitReadInt(self, ctx:MT22Parser.ReadIntContext):
         name = 'readInteger'
-        return CallStmt(name, [])
+        return FuncCall(name, [])
 
 
     # Visit a parse tree produced by MT22Parser#printInt.
@@ -213,7 +231,7 @@ class ASTGeneration(MT22Visitor):
     # readFloat: 'readFloat' LB RB SEMI;
     def visitReadFloat(self, ctx:MT22Parser.ReadFloatContext):
         name = 'readFloat'
-        return CallStmt(name, [])
+        return FuncCall(name, [])
 
 
     # Visit a parse tree produced by MT22Parser#printFloat.
@@ -228,7 +246,7 @@ class ASTGeneration(MT22Visitor):
     # readBool: 'readBoolean' LB RB SEMI;
     def visitReadBool(self, ctx:MT22Parser.ReadBoolContext):
         name = 'readBoolean'
-        return CallStmt(name, [])
+        return FuncCall(name, [])
 
 
     # Visit a parse tree produced by MT22Parser#printBool.
@@ -243,7 +261,7 @@ class ASTGeneration(MT22Visitor):
     # readString: 'readString' LB RB SEMI;
     def visitReadString(self, ctx:MT22Parser.ReadStringContext):
         name = 'readString'
-        return CallStmt(name, [])
+        return FuncCall(name, [])
 
 
     # Visit a parse tree produced by MT22Parser#printString.
@@ -449,12 +467,14 @@ class ASTGeneration(MT22Visitor):
     # Visit a parse tree produced by MT22Parser#expr7.
     # expr7: expr8 idx_op | expr8;
     def visitExpr7(self, ctx:MT22Parser.Expr7Context):
-        if ctx.idx_op(): return ArrayCell(self.visit(ctx.expr8()), self.visit(ctx.idx_op()))
+        if ctx.idx_op():
+            name = ctx.expr8().getText()
+            return ArrayCell(name, self.visit(ctx.idx_op()))
         else: return self.visit(ctx.expr8())
 
 
     # Visit a parse tree produced by MT22Parser#expr8.
-    # expr8: subexpr | ID | INTLIT | FLOATLIT | boollit | STRINGLIT | callexpr | arraylit;
+    # expr8: subexpr | ID | INTLIT | FLOATLIT | boollit | STRINGLIT | callexpr | arraylit | spec_func_expr;
     def visitExpr8(self, ctx:MT22Parser.Expr8Context):
         if ctx.subexpr(): return self.visit(ctx.subexpr())
         elif ctx.ID(): return Id(ctx.ID().getText())
@@ -464,6 +484,7 @@ class ASTGeneration(MT22Visitor):
         elif ctx.boollit(): return self.visit(ctx.boollit())
         elif ctx.callexpr(): return self.visit(ctx.callexpr())
         elif ctx.arraylit(): return self.visit(ctx.arraylit())
+        elif ctx.spec_func_expr(): return self.visit(ctx.spec_func_expr())
 
 
     # Visit a parse tree produced by MT22Parser#subexpr.

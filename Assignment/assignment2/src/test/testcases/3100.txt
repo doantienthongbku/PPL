@@ -1,0 +1,8 @@
+
+        inc : function void (out n : integer, delta : integer){
+            n = n + delta;
+            for(i = 1, i < 10, i+1){
+                writeInt(i);
+            } 
+        }
+        

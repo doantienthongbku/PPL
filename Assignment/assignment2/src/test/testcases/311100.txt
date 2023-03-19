@@ -1,0 +1,7 @@
+
+            
+            main: function void () {
+                delta: integer = 5;
+                voidB(x,delta);
+            }
+        

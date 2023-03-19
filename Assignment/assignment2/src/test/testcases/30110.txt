@@ -1,0 +1,5 @@
+
+            main: function void () {
+                a1, a2 : string = "Hello ", "World!" ;
+                mn: string = "Good";          
+            } 
