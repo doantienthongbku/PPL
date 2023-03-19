@@ -1,0 +1,20 @@
+
+        main: function void () {  
+            do
+                {
+                    if(true)
+                        {
+                            printString("true");
+                            continue;
+                        }
+                    else
+                    {
+                        if(false)
+                            break;
+                        else
+                            return false;
+                    }
+                        
+                }
+            while(_in_range_1_10_(i)!=1);
+        }

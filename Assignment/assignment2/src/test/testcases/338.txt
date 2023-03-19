@@ -1,0 +1,9 @@
+
+        modArray: function array[3] of integer (inherit a: array[3] of integer,out n: integer){
+            a[0] = a[0] + n;
+            if(a[1] < n) a[1] = a[1] + n; 
+            if(a[2] > 0) return a;
+            else a[2] = -a[2];
+            return a;
+        }
+        

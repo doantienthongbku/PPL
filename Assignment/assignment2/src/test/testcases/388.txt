@@ -1,0 +1,7 @@
+
+        printArray: function void (inherit a: array[3] of integer,n: integer){
+            a = a - a;
+            a = a - (-a);
+
+        }
+        

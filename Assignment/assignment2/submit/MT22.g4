@@ -48,20 +48,15 @@ callstmt: ID LB arglist RB SEMI;
 spec_func_stmt: printInt | printFloat | printBool | printString | superr | preventDefault;
 spec_func_expr: readInt | readFloat | readBool | readString;
 readInt: 'readInteger' LB RB;
-printInt: 'printInteger' LB intVal RB SEMI;
+printInt: 'printInteger' LB expr RB SEMI;
 readFloat: 'readFloat' LB RB;
-printFloat: 'printFloat' LB floatVal RB SEMI;
+printFloat: 'printFloat' LB expr RB SEMI;
 readBool: 'readBoolean' LB RB;
-printBool: 'printBoolean' LB boolVal RB SEMI;
+printBool: 'printBoolean' LB expr RB SEMI;
 readString: 'readString' LB RB;
-printString: 'printString' LB stringVal RB SEMI;
+printString: 'printString' LB expr RB SEMI;
 superr: 'super' LB exprlist RB SEMI;
 preventDefault: 'preventDefault' LB RB SEMI;
-
-intVal: ID | INTLIT | expr;
-floatVal: ID | FLOATLIT | expr;
-stringVal: ID | STRINGLIT | expr;
-boolVal: ID | boollit | expr;
 
 // Variable declarations
 vardecl: (helper | notassign) SEMI;

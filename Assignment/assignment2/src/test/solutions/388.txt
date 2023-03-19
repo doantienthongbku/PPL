@@ -1,0 +1,3 @@
+Program([
+	FuncDecl(printArray, VoidType, [InheritParam(a, ArrayType([3], IntegerType)), Param(n, IntegerType)], None, BlockStmt([AssignStmt(Id(a), BinExpr(-, Id(a), Id(a))), AssignStmt(Id(a), BinExpr(-, Id(a), UnExpr(-, Id(a))))]))
+])

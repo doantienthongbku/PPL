@@ -1,6 +1,3 @@
 Program([
-	VarDecl(x, BooleanType, BooleanLit(True))
-	VarDecl(y, BooleanType, BooleanLit(False))
-	VarDecl(a1, AutoType, Id(b1))
-	VarDecl(a2, AutoType, Id(b2))
+	VarDecl(x, IntegerType)
 ])

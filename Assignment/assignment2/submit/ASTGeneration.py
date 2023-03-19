@@ -177,21 +177,6 @@ class ASTGeneration(MT22Visitor):
         arglist = self.visit(ctx.arglist())
         return CallStmt(name, arglist)
 
-
-    # Visit a parse tree produced by MT22Parser#spec_func.
-    # spec_func: readInt | printInt | readFloat | printFloat| readBool 
-	#          | printBool | readString | printString | superr | preventDefault;
-    # def visitSpec_func(self, ctx:MT22Parser.Spec_funcContext):
-    #     if ctx.readInt(): return self.visit(ctx.readInt())
-    #     elif ctx.printInt(): return self.visit(ctx.printInt())
-    #     elif ctx.readFloat(): return self.visit(ctx.readFloat())
-    #     elif ctx.printFloat(): return self.visit(ctx.printFloat())
-    #     elif ctx.readBool(): return self.visit(ctx.readBool())
-    #     elif ctx.printBool(): return self.visit(ctx.printBool())
-    #     elif ctx.readString(): return self.visit(ctx.readString())
-    #     elif ctx.printString(): return self.visit(ctx.printString())
-    #     elif ctx.superr(): return self.visit(ctx.superr())
-    #     elif ctx.preventDefault(): return self.visit(ctx.preventDefault())
     
     # Visit a parse tree produced by MT22Parser#spec_func_stmt.
     # spec_func_stmt: printInt | printFloat | printBool | printString | superr | preventDefault;
@@ -220,10 +205,10 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#printInt.
-    # printInt: 'printInteger' LB intVal RB SEMI;
+    # printInt: 'printInteger' LB expr RB SEMI;
     def visitPrintInt(self, ctx:MT22Parser.PrintIntContext):
         name = 'printInteger'
-        args = self.visit(ctx.intVal())
+        args = [self.visit(ctx.expr())]
         return CallStmt(name, args)
 
 
@@ -235,10 +220,10 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#printFloat.
-    # printFloat: 'printFloat' LB floatVal RB SEMI;
+    # printFloat: 'printFloat' LB expr RB SEMI;
     def visitPrintFloat(self, ctx:MT22Parser.PrintFloatContext):
         name = 'printFloat'
-        args = self.visit(ctx.floatVal())
+        args = [self.visit(ctx.expr())]
         return CallStmt(name, args)
 
 
@@ -250,10 +235,10 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#printBool.
-    # printBool: 'printBoolean' LB boolVal RB SEMI;
+    # printBool: 'printBoolean' LB expr RB SEMI;
     def visitPrintBool(self, ctx:MT22Parser.PrintBoolContext):
         name = 'printBoolean'
-        args = self.visit(ctx.boolVal())
+        args = [self.visit(ctx.expr())]
         return CallStmt(name, args)
 
 
@@ -265,10 +250,10 @@ class ASTGeneration(MT22Visitor):
 
 
     # Visit a parse tree produced by MT22Parser#printString.
-    # printString: 'printString' LB stringVal RB SEMI;
+    # printString: 'printString' LB expr RB SEMI;
     def visitPrintString(self, ctx:MT22Parser.PrintStringContext):
         name = 'printString'
-        args = self.visit(ctx.stringVal())
+        args = [self.visit(ctx.expr())]
         return CallStmt(name, args)
 
 
@@ -285,63 +270,6 @@ class ASTGeneration(MT22Visitor):
     def visitPreventDefault(self, ctx:MT22Parser.PreventDefaultContext):
         name = 'preventDefault'
         return CallStmt(name, [])
-
-
-    # Visit a parse tree produced by MT22Parser#intVal.
-    # intVal: ID | INTLIT | expr;
-    def visitIntVal(self, ctx:MT22Parser.IntValContext):
-        if ctx.ID():
-            return [ctx.ID().getText()]
-        elif ctx.INTLIT():
-            return [IntegerLit(int(ctx.INTLIT().getText()))]
-        elif ctx.expr():
-            return [self.visit(ctx.expr())]
-
-
-    # Visit a parse tree produced by MT22Parser#floatVal.
-    # floatVal: ID | FLOATLIT | expr;
-    def visitFloatVal(self, ctx:MT22Parser.FloatValContext):
-        if ctx.ID():
-            return [ctx.ID().getText()]
-        elif ctx.FLOATLIT():
-            return [FloatLit(float(ctx.FLOATLIT().getText()))]
-        elif ctx.expr():
-            return [self.visit(ctx.expr())]
-
-
-    # Visit a parse tree produced by MT22Parser#stringVal.
-    # stringVal: ID | STRINGLIT | expr;
-    def visitStringVal(self, ctx:MT22Parser.StringValContext):
-        if ctx.ID():
-            return [ctx.ID().getText()]
-        elif ctx.STRINGLIT():
-            return [StringLit(ctx.STRINGLIT().getText())]
-        elif ctx.expr():
-            return [self.visit(ctx.expr())]
-
-    # Visit a parse tree produced by MT22Parser#boolVal.
-    # boolVal: ID | boollit | expr;
-    def visitBoolVal(self, ctx:MT22Parser.BoolValContext):
-        if ctx.ID():
-            return [ctx.ID().getText()]
-        elif ctx.boollit():
-            return [self.visit(ctx.boollit())]
-        elif ctx.expr():
-            return [self.visit(ctx.expr())]
-
-
-    # Visit a parse tree produced by MT22Parser#vardecl.
-    # vardecl: idlist COLON var_typ (ASSIGN exprlist)? SEMI
-    # def visitVardecl(self, ctx:MT22Parser.VardeclContext):
-    #     # name: str, typ: Type, init: Expr or None = None
-    #     names = self.visit(ctx.idlist())
-    #     typ = self.visit(ctx.var_typ())
-    #     if ctx.exprlist():
-    #         inits = self.visit(ctx.exprlist())
-    #         return [VarDecl(names[i], typ, inits[i]) for i in range(len(names))]
-    #     else:
-    #         inits = None
-    #         return [VarDecl(names[i], typ, inits) for i in range(len(names))]
     
     # Visit a parse tree produced by MT22Parser#vardecl.
     # vardecl: (helper | notassign) SEMI;
@@ -479,7 +407,11 @@ class ASTGeneration(MT22Visitor):
         if ctx.subexpr(): return self.visit(ctx.subexpr())
         elif ctx.ID(): return Id(ctx.ID().getText())
         elif ctx.INTLIT(): return IntegerLit(int(ctx.INTLIT().getText()))
-        elif ctx.FLOATLIT(): return FloatLit(float(ctx.FLOATLIT().getText()))
+        elif ctx.FLOATLIT():
+            fl_str = ctx.FLOATLIT().getText()
+            if '.e' in fl_str or '.E' in fl_str:
+                fl_str = fl_str.replace('.e', '.0e').replace('.E', '.0E')
+            return FloatLit(float(fl_str))
         elif ctx.STRINGLIT(): return StringLit(ctx.STRINGLIT().getText())
         elif ctx.boollit(): return self.visit(ctx.boollit())
         elif ctx.callexpr(): return self.visit(ctx.callexpr())

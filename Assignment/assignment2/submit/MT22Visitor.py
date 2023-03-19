@@ -164,26 +164,6 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#intVal.
-    def visitIntVal(self, ctx:MT22Parser.IntValContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#floatVal.
-    def visitFloatVal(self, ctx:MT22Parser.FloatValContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#stringVal.
-    def visitStringVal(self, ctx:MT22Parser.StringValContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#boolVal.
-    def visitBoolVal(self, ctx:MT22Parser.BoolValContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MT22Parser#vardecl.
     def visitVardecl(self, ctx:MT22Parser.VardeclContext):
         return self.visitChildren(ctx)

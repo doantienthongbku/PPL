@@ -177,21 +177,6 @@ class ASTGeneration(MT22Visitor):
         arglist = self.visit(ctx.arglist())
         return CallStmt(name, arglist)
 
-
-    # Visit a parse tree produced by MT22Parser#spec_func.
-    # spec_func: readInt | printInt | readFloat | printFloat| readBool 
-	#          | printBool | readString | printString | superr | preventDefault;
-    # def visitSpec_func(self, ctx:MT22Parser.Spec_funcContext):
-    #     if ctx.readInt(): return self.visit(ctx.readInt())
-    #     elif ctx.printInt(): return self.visit(ctx.printInt())
-    #     elif ctx.readFloat(): return self.visit(ctx.readFloat())
-    #     elif ctx.printFloat(): return self.visit(ctx.printFloat())
-    #     elif ctx.readBool(): return self.visit(ctx.readBool())
-    #     elif ctx.printBool(): return self.visit(ctx.printBool())
-    #     elif ctx.readString(): return self.visit(ctx.readString())
-    #     elif ctx.printString(): return self.visit(ctx.printString())
-    #     elif ctx.superr(): return self.visit(ctx.superr())
-    #     elif ctx.preventDefault(): return self.visit(ctx.preventDefault())
     
     # Visit a parse tree produced by MT22Parser#spec_func_stmt.
     # spec_func_stmt: printInt | printFloat | printBool | printString | superr | preventDefault;

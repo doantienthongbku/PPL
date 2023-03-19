@@ -1,1 +1,4 @@
-foo: function integer (a: integer) {}
+func : function integer () {
+                if (a > 0)
+                    i : integer = 0;
+            }

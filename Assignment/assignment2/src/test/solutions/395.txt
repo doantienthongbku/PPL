@@ -1,0 +1,4 @@
+Program([
+	VarDecl(arr2, ArrayType([2, 3], FloatType), ArrayLit([ArrayLit([FloatLit(3e-35), IntegerLit(2), FloatLit(1.52)]), ArrayLit([FloatLit(1.23e-11), FloatLit(0.05), FloatLit(6.22)])]))
+	FuncDecl(floatTest, VoidType, [], None, BlockStmt([AssignStmt(Id(a), FloatLit(0.0)), AssignStmt(Id(a), FloatLit(0.0)), AssignStmt(Id(a), FloatLit(0.0)), AssignStmt(Id(a), FloatLit(0.0)), AssignStmt(Id(a), FloatLit(5e+51)), AssignStmt(Id(a), FloatLit(5e+52)), AssignStmt(Id(a), FloatLit(5.5e+52)), AssignStmt(Id(a), FloatLit(5.2367387e+59)), AssignStmt(Id(a), FloatLit(5.23673871323e+59))]))
+])

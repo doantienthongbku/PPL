@@ -1,0 +1,3 @@
+Program([
+	VarDecl(a, IntegerType, FuncCall(round, [BinExpr(-, FloatLit(1.23), FloatLit(1.496)), Id(b)]))
+])
