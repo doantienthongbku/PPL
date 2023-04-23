@@ -91,11 +91,11 @@ class StaticChecker(Visitor, Utils):
             init_typ = self.visit(ast.init, env)
             if isinstance(typ, AutoType):
                 typ = init_typ
-            elif isinstance(typ, ArrayType):            # TODO: check if init_typ is ArrayType
+            elif isinstance(typ, ArrayType):
                 if isinstance(init_typ, ArrayType):
-                    if isinstance(typ.eleType, AutoType):
-                        typ.eleType = init_typ.eleType
-                    elif not isinstance(typ.eleType, type(init_typ.eleType)):
+                    if isinstance(typ.typ, AutoType):
+                        typ.typ = init_typ.typ
+                    elif not isinstance(typ.typ, type(init_typ.typ)):
                         raise TypeMismatchInVarDecl(ast)
                 else:
                     raise TypeMismatchInVarDecl(ast)
@@ -310,9 +310,13 @@ class StaticChecker(Visitor, Utils):
     def visitArrayCell(self, ast:ArrayCell, env):
         name = ast.name
         cell = ast.cell
+        item = None
         
         # check if name is declared
-        if self.lookup(name, env, lambda x: x.name) is None:
+        for sub_env in env:
+            item = self.lookup(name, sub_env, lambda x: x.name)
+            if item is not None: break
+        if item is None:
             raise Undeclared(Identifier(), name)
         
         # check if name is array
@@ -320,20 +324,20 @@ class StaticChecker(Visitor, Utils):
             typ_cell_item = self.visit(cell[i], env)
             if not isinstance(typ_cell_item, IntegerType):
                 raise TypeMismatchInExpression(ast)
-            
-        return self.lookup(name, env, lambda x: x.typ)
+        
+        return item.typ.typ
         
     def visitArrayLit(self, ast:ArrayLit, env):
         exp_list = ast.explist
         if len(exp_list) != 0:
             typ = self.visit(exp_list[0], env)
             for i in range(1, len(exp_list)):
-                if typ != self.visit(exp_list[i], env):
+                item_typ = self.visit(exp_list[i], env)
+                if not isinstance(typ, type(item_typ)):
                     raise IllegalArrayLiteral(ast)
         else:
             typ = AutoType()
-        return ArrayType(len(exp_list), typ)
-        #TODO: fix this
+        return ArrayType(exp_list, typ)
 
     def visitIntegerLit(self, ast, env): return IntegerType()
     def visitFloatLit(self, ast, env): return FloatType()
@@ -344,6 +348,7 @@ class StaticChecker(Visitor, Utils):
         func = None
         for sub_env in env:
             func = self.lookup(ast.name, sub_env, lambda x: x.name)
+            if func is not None: break
         if func is None:
             raise Undeclared(Function(), ast.name)
         
@@ -445,6 +450,7 @@ class StaticChecker(Visitor, Utils):
         func = None
         for sub_env in env:
             func = self.lookup(ast.name, sub_env, lambda x: x.name)
+            if func is not None: break
         if func is None:
             raise Undeclared(Function(), ast.name)
         

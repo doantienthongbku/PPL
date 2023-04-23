@@ -270,10 +270,67 @@ class CheckerSuite(unittest.TestCase):
     #     expect = "Type mismatch in statement: AssignStmt(Id(m), IntegerLit(0))"
     #     self.assertTrue(TestChecker.test(input,expect,427))
     
-    def test_array_1(self):
+    # def test_array_1(self):
+    #     input = """
+    #     arr : array [3] of integer = {1,2,3.3};
+    #     main: function void(){}
+    #     """
+    #     expect = "Illegal array literal: ArrayLit([IntegerLit(1), IntegerLit(2), FloatLit(3.3)])"
+    #     self.assertTrue(TestChecker.test(input,expect,428))
+        
+    # def test_array_2(self):
+    #     input = """
+    #     arr : array [3] of integer = {1.0,2.2,3.3};
+    #     main: function void(){}
+    #     """
+    #     expect = "Type mismatch in Variable Declaration: VarDecl(arr, ArrayType([3], IntegerType), ArrayLit([FloatLit(1.0), FloatLit(2.2), FloatLit(3.3)]))"
+    #     self.assertTrue(TestChecker.test(input,expect,429))
+    
+    # def test_array_3(self):
+    #     input = """
+    #     arr : array [2,3,4,5] of integer;
+    #     main: function void(){}
+    #     """
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input,expect,430))
+    
+    # def test_array_7(self):
+    #     input = """
+    #     arr : array [2] of integer = {1,2};
+    #     a : float = 1.0;
+    #     element : integer = arr[a];
+    #     main: function void(){
+            
+    #     }
+    #     """
+    #     expect = "Type mismatch in expression: ArrayCell(arr, [Id(a)])"
+    #     self.assertTrue(TestChecker.test(input,expect,400))
+    
+    # def test_array_8(self):
+    #     input = """
+    #     a : float = 1.0;
+    #     element : integer = a[1.0];
+    #     main: function void(){
+    #     }
+    #     """
+    #     expect = "Type mismatch in expression: ArrayCell(a, [FloatLit(1.0)])"
+    #     self.assertTrue(TestChecker.test(input,expect,400))
+    
+    # def test_array_9(self):
+    #     input = """
+    #     element : string = arr[10];
+    #     main: function void(){
+    #     }
+    #     """
+    #     expect = "Undeclared Identifier: arr"
+    #     self.assertTrue(TestChecker.test(input,expect,400))
+    
+    def test_array_10(self):
         input = """
-        arr : array [3] of integer = {1,2,3.3};
-        main: function void(){}
+        arr : array [5] of integer = {0,1,2,3,4};
+        element : integer = arr[arr[0]];
+        main: function void(){
+        }
         """
-        expect = "Illegal array literal: ArrayLit([IntegerLit(1), IntegerLit(2), FloatLit(3.3)])"
+        expect = ""
         self.assertTrue(TestChecker.test(input,expect,400))
