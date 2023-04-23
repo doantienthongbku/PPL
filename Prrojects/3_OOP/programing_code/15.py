@@ -22,16 +22,29 @@ class Eval:
         elif type(ctx) is BinExp:
             left = self.visit(ctx.left)
             right = self.visit(ctx.right)
-            return eval("{} {} {}".format(left, ctx, right))
+            op = ctx.op
+            return eval("{} {} {}".format(left, op, right))
         elif type(ctx) is UnExp:
             value = self.visit(ctx.operand)
             return - value if ctx.op == '-' else value
     
 class PrintPrefix:
-    def printPrefix(self, ctx: Exp):
-        pass
+    def visit(self, ctx: Exp):
+        if type(ctx) is IntLit or type(ctx) is FloatLit:
+            return str(ctx.value)
+        elif type(ctx) is BinExp:
+            return ctx.op + " " + self.visit(ctx.left) + " " + self.visit(ctx.right)
+        elif type(ctx) is UnExp:
+            return ctx.op + "." + " " + self.visit(ctx.operand)
         
-class PrintPostfix: pass
+class PrintPostfix:
+    def visit(self, ctx: Exp):
+        if type(ctx) is IntLit or type(ctx) is FloatLit:
+            return str(ctx.value)
+        elif type(ctx) is BinExp:
+            return self.visit(ctx.left) + " " + self.visit(ctx.right) + " " + ctx.op
+        elif type(ctx) is UnExp:
+            return self.visit(ctx.operand) + " " + ctx.op + "." + " "
         
 
 if __name__ == "__main__":

@@ -49,11 +49,6 @@ class BKOOLVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by BKOOLParser#paramlist.
-    def visitParamlist(self, ctx:BKOOLParser.ParamlistContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by BKOOLParser#paramprime.
     def visitParamprime(self, ctx:BKOOLParser.ParamprimeContext):
         return self.visitChildren(ctx)
@@ -66,71 +61,6 @@ class BKOOLVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by BKOOLParser#body.
     def visitBody(self, ctx:BKOOLParser.BodyContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#stmtlist.
-    def visitStmtlist(self, ctx:BKOOLParser.StmtlistContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#stmt.
-    def visitStmt(self, ctx:BKOOLParser.StmtContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#assignstmt.
-    def visitAssignstmt(self, ctx:BKOOLParser.AssignstmtContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#returnstmt.
-    def visitReturnstmt(self, ctx:BKOOLParser.ReturnstmtContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#callstmt.
-    def visitCallstmt(self, ctx:BKOOLParser.CallstmtContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#arglist.
-    def visitArglist(self, ctx:BKOOLParser.ArglistContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#arglistprime.
-    def visitArglistprime(self, ctx:BKOOLParser.ArglistprimeContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#expr.
-    def visitExpr(self, ctx:BKOOLParser.ExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#expr1.
-    def visitExpr1(self, ctx:BKOOLParser.Expr1Context):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#expr2.
-    def visitExpr2(self, ctx:BKOOLParser.Expr2Context):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#expr3.
-    def visitExpr3(self, ctx:BKOOLParser.Expr3Context):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#subexpr.
-    def visitSubexpr(self, ctx:BKOOLParser.SubexprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#callexpr.
-    def visitCallexpr(self, ctx:BKOOLParser.CallexprContext):
         return self.visitChildren(ctx)
 
 

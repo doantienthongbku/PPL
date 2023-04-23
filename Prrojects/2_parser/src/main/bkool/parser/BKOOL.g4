@@ -24,58 +24,27 @@ program: decllist EOF;
 decllist: decl decllist | decl;
 decl: vardecl | funcdecl;
 
-vardecl:  typ idlist SEMI;
-funcdecl: typ ID paramdecl body;
+vardecl: typ idlist SEMI;
+funcdecl: typ idlist LP paramdecl RP body;
 
-COMMA: ',';
-SEMI: ';';
-LB: '(';
-RB: ')';
-LP: '{';
-RP: '}';
-ASSIGN: '=';
-ADD: '+';
-SUB: '-';
-MUL: '*';
-DIV: '/';
-RETURN_TEXT: 'return';
-FLOAT: 'float';
-INT: 'int';
-typ: FLOAT | INT;
-INTLIT: '0'
-      | [1-9][0-9]*;
-FLOATLIT: INTEGER ('.' INTEGER)? SCIENTIFIC
-		| INTEGER '.' INTEGER;
-fragment DIGIT: [0-9];
-fragment INTEGER: DIGIT+;
-fragment SCIENTIFIC: [eE] [+-]? INTEGER;
+typ: INT | FLOAT;
 
-ID: [a-zA-Z] [a-zA-Z0-9]*; // includes a sequence of alphabetic characters.
-idlist: ID COMMA idlist | ID;
-
-paramdecl: LB paramlist RB;
-paramlist: paramprime | ;
-paramprime: param SEMI paramprime | param;
+idlist: ID (COMMA idlist) | ID;
+paramdecl: paramprime | ;
+paramprime: param (SEMI paramprime) | param;
 param: typ idlist;
 
-// body: 'body';
-body: LP stmtlist RP;
-stmtlist: stmt stmtlist | ;
-stmt: vardecl | assignstmt | callstmt | returnstmt;
 
-assignstmt: ID ASSIGN expr SEMI;
-returnstmt: RETURN_TEXT expr SEMI;
-callstmt: ID LB arglist RB SEMI;
-arglist: arglistprime | ;
-arglistprime: expr COMMA arglistprime | expr;
+body: 'body';
 
-// expression
-expr: expr1 ADD expr | expr1;
-expr1: expr2 SUB expr1 | expr2;
-expr2: expr3 (MUL | DIV) expr2 | expr3;
-expr3: subexpr | ID | INTLIT | FLOATLIT | callexpr;
-subexpr: LB expr RB;
-callexpr: ID LB arglist RB;
+FLOAT: 'float';
+INT: 'int';
+ID: [a-zA-Z0-9_]+; 
+
+COMMA: ',';
+SEMI: '.';
+LP: '(';
+RP: ')';
 
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines

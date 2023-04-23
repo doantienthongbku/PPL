@@ -24,7 +24,7 @@ class Visitor:
         return ctx.accept(self)
 
 class Eval(Visitor):
-    def visitIniLit(self, ctx: IntLit):
+    def visitIntLit(self, ctx: IntLit):
         return ctx.value
     
     def visitFloatLit(self, ctx: FloatLit):
@@ -33,18 +33,38 @@ class Eval(Visitor):
     def visitBinExp(self, ctx: BinExp):
         left = self.visit(ctx.left)
         right = self.visit(ctx.right)
-        return eval("{} {} {}".format(left, ctx, right))
+        op = ctx.op
+        return eval("{} {} {}".format(left, op, right))
 
     def visitUnExp(self, ctx: UnExp):
         value = self.visit(ctx.operand)
         return - value if ctx.op == '-' else value
     
-class PrintPrefix:
-    def printPrefix(self, ctx: Exp):
-        pass
+class PrintPrefix(Visitor):
+    def visitIntLit(self, ctx: IntLit):
+        return str(ctx.value)
+    
+    def visitFloatLit(self, ctx: FloatLit):
+        return str(ctx.value)
+    
+    def visitBinExp(self, ctx: BinExp):
+        return ctx.op + " " + self.visit(ctx.left) + " " + self.visit(ctx.right)
+
+    def visitUnExp(self, ctx: UnExp):
+        return ctx.op + ". " + self.visit(ctx.operand)
         
-class PrintPostfix: pass
-        
+class PrintPostfix(Visitor):
+    def visitIntLit(self, ctx: IntLit):
+        return str(ctx.value)
+    
+    def visitFloatLit(self, ctx: FloatLit):
+        return str(ctx.value)
+    
+    def visitBinExp(self, ctx: BinExp):
+        return self.visit(ctx.left) + " " + self.visit(ctx.right) + " " + ctx.op
+
+    def visitUnExp(self, ctx: UnExp):
+        return self.visit(ctx.operand) + ctx.op + ". "
 
 if __name__ == "__main__":
     x1 = IntLit(1)

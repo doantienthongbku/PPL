@@ -1,0 +1,133 @@
+1. Consider the following code:
+kotlin
+Copy code
+class A:
+    pass
+    
+class B(A):
+    pass
+    
+class C(A):
+    pass
+    
+class D(B, C):
+    pass
+    
+class E(C, B):
+    pass
+What is the method resolution order (MRO) for class E in this code?
+a) E -> C -> B -> A
+b) E -> B -> C -> A
+c) E -> A -> C -> B
+d) E -> A -> B -> C
+
+Answer: b) E -> B -> C -> A. The MRO for class E in this code is determined using the C3 linearization algorithm. The algorithm first adds E to the MRO list, then looks at the parent classes B and C. Since B and C both inherit from A, A is added next. Finally, the MRO list is constructed by following the order of the parents in the list of E's inheritance, but making sure to preserve the order of A in the list of parent classes. Therefore, the MRO for class E is [E, B, C, A].
+
+2. Consider the following code:
+kotlin
+Copy code
+class A:
+    pass
+    
+class B(A):
+    pass
+    
+class C(A):
+    pass
+    
+class D(B, C):
+    pass
+    
+class E(C, D):
+    pass
+What is the method resolution order (MRO) for class E in this code?
+a) E -> C -> B -> D -> A
+b) E -> C -> D -> B -> A
+c) E -> B -> C -> D -> A
+d) E -> B -> D -> C -> A
+
+Answer: b) E -> C -> D -> B -> A. The MRO for class E in this code is determined using the C3 linearization algorithm. The algorithm first adds E to the MRO list, then looks at the parent classes C and D. Since D inherits from both B and C, the algorithm looks at the MRO lists of B and C. B's MRO list is [B, A] and C's MRO list is [C, A]. Since A is not already in the MRO list, it is added next. Finally, the MRO list is constructed by following the order of the parents in the list of E's inheritance, but making sure to preserve the order of A in the list of parent classes. Therefore, the MRO for class E is [E, C, D, B, A].
+
+3. Consider the following code:
+kotlin
+Copy code
+class A:
+    pass
+    
+class B(A):
+    pass
+    
+class C(A):
+    pass
+    
+class D(B, C):
+    pass
+    
+class E(D, B):
+    pass
+What is the method resolution order (MRO) for class E in this code?
+a) E -> D -> B -> C -> A
+b) E -> B -> D -> C -> A
+c) E -> A -> B -> D -> C
+d) E -> A -> C -> B -> D
+
+Answer: b) E -> B -> D -> C -> A. The MRO for class E in this code is determined using the C3 linearization algorithm. The algorithm first adds E to the MRO list, then looks at the parent classes B and D. Since D inherits from C, the algorithm looks at the MRO list of C, which is [C, A]. A is added next, and finally the MRO list is constructed by following the order of the parents in the list of E's inheritance, but making sure to preserve the order of A in the
+
+4. Consider the following code:
+kotlin
+Copy code
+class A:
+    pass
+    
+class B(A):
+    pass
+    
+class C(A):
+    pass
+    
+class D(B, C):
+    pass
+    
+class E(C, B):
+    pass
+    
+class F(D, E):
+    pass
+What is the method resolution order (MRO) for class F in this code?
+a) F -> D -> E -> C -> B -> A
+b) F -> D -> B -> E -> C -> A
+c) F -> E -> D -> C -> B -> A
+d) F -> E -> C -> D -> B -> A
+
+Answer: a) F -> D -> E -> C -> B -> A. The MRO for class F in this code is determined using the C3 linearization algorithm. The algorithm first adds F to the MRO list, then looks at the parent classes D and E. Since both D and E inherit from B and C, the algorithm looks at the MRO lists of B and C. B's MRO list is [B, A] and C's MRO list is [C, A]. Since A is not already in the MRO list, it is added next. Finally, the MRO list is constructed by following the order of the parents in the list of F's inheritance, but making sure to preserve the order of A in the list of parent classes. Therefore, the MRO for class F is [F, D, E, C, B, A].
+
+5. Consider the following code:
+kotlin
+Copy code
+class A:
+    pass
+    
+class B(A):
+    pass
+    
+class C(A):
+    pass
+    
+class D(B, C):
+    pass
+    
+class E(C, B):
+    pass
+    
+class F(D, E):
+    pass
+    
+class G(F):
+    pass
+What is the method resolution order (MRO) for class G in this code?
+a) G -> F -> D -> E -> C -> B -> A
+b) G -> F -> E -> D -> C -> B -> A
+c) G -> F -> D -> B -> E -> C -> A
+d) G -> F -> E -> B -> D -> C -> A
+
+Answer: b) G -> F -> E -> D -> C -> B -> A. The MRO for class G in this code is determined using the C3 linearization algorithm. The algorithm first adds G to the MRO list, then looks at the parent class F. Since F inherits from both D and E, the algorithm looks at the MRO lists of D and E. The MRO for D was determined in the previous question, and the MRO for E is [E, C, B, A]. The algorithm then constructs the MRO list by following the order of the parents in the list of G's inheritance, but making sure to preserve the order of A in the list of parent classes. Therefore, the MRO for class G is [G, F, E, D, C, B, A].

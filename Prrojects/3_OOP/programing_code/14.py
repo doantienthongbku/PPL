@@ -7,12 +7,16 @@ class IntLit(Exp):
         self.value = value
     def eval(self):
         return self.value
+    def printPrefix(self):
+        return str(self.value)
     
 class FloatLit(Exp):
     def __init__(self, value: float) -> None:
         self.value = value
     def eval(self):
         return self.value
+    def printPrefix(self):
+        return str(self.value)
 
 class BinExp(Exp):
     def __init__(self, num1: Exp, oper: str, num2: Exp) -> None:
@@ -25,6 +29,8 @@ class BinExp(Exp):
         elif self.oper == '-': return self.num1.eval() - self.num2.eval()
         elif self.oper == '*': return self.num1.eval() * self.num2.eval()
         elif self.oper == '/': return self.num1.eval() / self.num2.eval()
+    def printPrefix(self):
+        return self.oper + " " + self.num1.printPrefix() + " " + self.num2.printPrefix()
         
 class UnExp(Exp):
     def __init__(self, oper: str, num: Exp) -> None:
@@ -34,6 +40,8 @@ class UnExp(Exp):
     def eval(self):
         if self.oper == '+': return + self.num.eval()
         elif self.oper == '-': return - self.num.eval()
+    def printPrefix(self):
+        return self.oper + "." + " " + self.num.printPrefix()
 
 
 if __name__ == '__main__':

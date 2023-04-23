@@ -20,7 +20,6 @@ program: EOF;
 
 
 SHEXA: DIGIT+ LETTER* {int(self.text, 16) % 2 == 0}?;
-
 fragment DIGIT: [0-9];
 fragment LETTER: [a-zA-Z];
 

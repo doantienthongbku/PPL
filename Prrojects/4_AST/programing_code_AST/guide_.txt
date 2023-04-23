@@ -1,0 +1,6 @@
+Các bước viết visit trong cây AST:
+
+1. Viết visit của luật sinh có nhiều tín hiệu kết thúc (viết từ dưới lên)
+2. Luật sinh có bao nhiêu trường hợp thì phải viết xử lí cho bấy nhiêu trường hợp
+3. Gặp tín hiệu k kết thúc thì gọi visit (đúng vơi BNF)
+   (Chỉ quan tâm tới con)
