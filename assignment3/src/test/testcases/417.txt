@@ -1,0 +1,4 @@
+a : integer = 12;
+        b: integer = 13;
+        c: string = "abc";
+        main : function void () {}

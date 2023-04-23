@@ -1,0 +1,5 @@
+a: integer = "string";
+        foo: function string(b: integer) {}
+        main: function void() {
+            a = 3;
+        }

@@ -1,6 +1,4 @@
 
-        area : float = 2.5;
-        an : float = 1 ;
-        x : float = true;
+        arr : array [3] of integer = {1,2,3.3};
         main: function void(){}
         

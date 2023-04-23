@@ -1,9 +1,9 @@
 
         a : integer = 1;
+        foo : function auto (){}
         main: function void() {
             res : auto = readString();
             b: integer = a;
             res = foo() + foo(2); 
         }
-        foo : function auto (){}
         

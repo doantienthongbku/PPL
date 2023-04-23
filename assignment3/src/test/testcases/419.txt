@@ -1,0 +1,8 @@
+c: integer = 3;
+        foo: function string (a: integer, b: integer) {
+            a = b;
+            b = c;
+        }
+        main: function void () {
+
+        }

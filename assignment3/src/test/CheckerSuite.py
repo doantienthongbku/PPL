@@ -126,15 +126,154 @@ class CheckerSuite(unittest.TestCase):
     #     expect = "Redeclared Variable: a"
     #     self.assertTrue(TestChecker.test(input,expect,414))
     
-    def test_15(self):
+    # def test_15(self):
+    #     input = """
+    #     a : integer = 1;
+    #     foo : function auto (){}
+    #     main: function void() {
+    #         res : auto = readString();
+    #         b: integer = a;
+    #         res = foo() + foo(2); 
+    #     }
+    #     """
+    #     expect = "Type mismatch in expression: FuncCall(foo, [IntegerLit(2)])"
+    #     self.assertTrue(TestChecker.test(input,expect,415))
+    
+    # def test_16(self):
+    #     input = """a : integer = 12;
+    #     b: integer = 13;
+    #     c: string = "abc";
+    #     foo : function string (d: integer, d: string) {
+    #         d: integer = 12;
+    #     }
+    #     main : function void () {}"""
+    #     expect = "Redeclared Parameter: d"
+    #     self.assertTrue(TestChecker.test(input, expect, 416))
+        
+    # def test_17(self):
+    #     input = """a : integer = 12;
+    #     b: integer = 13;
+    #     c: string = "abc";
+    #     main : function void () {}"""
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input, expect, 417))
+        
+    # def test_18(self):
+    #     input = """foo: function string (a: integer, b: string) {
+    #         a = b;
+    #     }
+    #     main: function void () {
+
+    #     }"""
+    #     expect = "Type mismatch in statement: AssignStmt(Id(a), Id(b))"
+    #     self.assertTrue(TestChecker.test(input, expect, 418))
+        
+    # def test_19(self):
+    #     input = """c: integer = 3;
+    #     foo: function string (a: integer, b: integer) {
+    #         a = b;
+    #         b = c;
+    #     }
+    #     main: function void () {
+
+    #     }"""
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input, expect, 419))
+        
+    # def test_20(self):
+    #     input = """a: integer = "string";
+    #     foo: function string(b: integer) {}
+    #     main: function void() {
+    #         a = 3;
+    #     }"""
+    #     expect = "Type mismatch in Variable Declaration: VarDecl(a, IntegerType, StringLit(string))"
+    #     self.assertTrue(TestChecker.test(input, expect, 420))
+    
+    # def test_21(self):
+    #     input = """a: auto = 3;
+    #     b: auto = 4;
+    #     foo: function string() {
+    #         b: auto = 3;
+    #         if (a == 3) {
+    #             a = 4;
+    #         }
+    #         else
+    #             a = 5;
+    #     }
+    #     main: function void() {}"""
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input, expect, 421))
+
+    # def test_22(self):
+    #     input = """a: auto = readString();
+    #     main: function void() {}"""
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input, expect, 422))
+    
+    # def test_23(self):
+    #     input = """
+    #     a : integer = 1;
+    #     b : integer = 2;
+    #     main: function void() {
+    #         b: integer = 3;
+    #         a: integer = 4;
+    #     }
+    #     """
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input,expect,423))
+    
+    # def test_24(self):
+    #     input = """
+    #     main: function void() {
+    #         i: integer;
+    #         a: integer = 0;
+    #         while (i < 10) {
+    #             a = a + 1;
+    #             i = i + 1;
+    #             break;
+    #         }
+    #         break;
+    #     }
+    #     """
+    #     expect = "Must in loop: BreakStmt()"
+    #     self.assertTrue(TestChecker.test(input,expect,424))
+    
+    # def test_25(self):
+    #     input = """foo: function integer(){}
+    #     main: function void(){
+    #         m: integer;
+    #         m = foo + 1;
+    #     }"""
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input,expect,425))
+    
+    # def test_26(self):
+    #     input = """m: string;
+    #     foo: function integer(a: integer){
+    #         m, n: string;
+    #         m = n;
+    #     }
+    #     main: function void(){
+    #     }"""
+    #     expect = ""
+    #     self.assertTrue(TestChecker.test(input,expect,426))
+    
+    # def test_27(self):
+    #     input = """m: integer;
+    #     foo: function integer(a: integer){
+    #         for (m = 0, m > 3, m + 1) {
+    #             break;
+    #         }
+    #     }
+    #     main: function void(){
+    #     }"""
+    #     expect = "Type mismatch in statement: AssignStmt(Id(m), IntegerLit(0))"
+    #     self.assertTrue(TestChecker.test(input,expect,427))
+    
+    def test_array_1(self):
         input = """
-        a : integer = 1;
-        main: function void() {
-            res : auto = readString();
-            b: integer = a;
-            res = foo() + foo(2); 
-        }
-        foo : function auto (){}
+        arr : array [3] of integer = {1,2,3.3};
+        main: function void(){}
         """
-        expect = "Type mismatch in expression: FuncCall(foo, [IntegerLit(2)])"
-        self.assertTrue(TestChecker.test(input,expect,415))
+        expect = "Illegal array literal: ArrayLit([IntegerLit(1), IntegerLit(2), FloatLit(3.3)])"
+        self.assertTrue(TestChecker.test(input,expect,400))

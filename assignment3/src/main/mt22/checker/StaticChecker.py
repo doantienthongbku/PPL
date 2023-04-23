@@ -72,7 +72,7 @@ class StaticChecker(Visitor, Utils):
                     break
 
         for decl in ast.decls:
-            env[0] += [self.visit(decl, env)]
+            self.visit(decl, env)
 
         # print(global_env)
         if not has_main:
@@ -108,7 +108,7 @@ class StaticChecker(Visitor, Utils):
             if isinstance(typ, AutoType):
                 raise Invalid(Variable(), name)
         
-        return Variable_Decl(name=name, typ=typ, value=ast.init)
+        env[0] += [Variable_Decl(name=name, typ=typ, value=ast.init)]
 
     def visitParamDecl(self, ast: ParamDecl, env):
         is_redeclared = self.lookup(ast.name, env[0], lambda x: x.name)
@@ -120,6 +120,7 @@ class StaticChecker(Visitor, Utils):
         is_inherit = ast.inherit
         is_out = ast.out
         
+        env[0] += [Param_Decl(name, typ, is_inherit=is_inherit, is_out=is_out)]
         return Param_Decl(name, typ, is_inherit=is_inherit, is_out=is_out)
 
     def visitFuncDecl(self, ast: FuncDecl, env):
@@ -131,8 +132,6 @@ class StaticChecker(Visitor, Utils):
         local_env = [[]] + env
         for param in ast.params:
             param_list.append(self.visit(param, local_env))
-
-        local_env[0] += param_list
         
         is_redeclared_param = self.lookup(ast.name, param_list, lambda x: x.name)
         if is_redeclared_param is not None:
@@ -143,12 +142,14 @@ class StaticChecker(Visitor, Utils):
         self.visit(ast.body, local_env)     # check body
         self.current_function = None
 
-        return Function_Decl(name=ast.name, param=param_list, ret=ast.return_type)
+        env[0] += [Function_Decl(name=ast.name, param=param_list, ret=ast.return_type)]
         
     def visitId(self, ast, env):
         for symbol_list in env:
             for symbol in symbol_list:
                 if ast.name == symbol.name:
+                    if isinstance(symbol, Function_Decl):
+                        return symbol.ret
                     return symbol.typ
         
         raise Undeclared(Identifier(), ast.name)
@@ -381,7 +382,7 @@ class StaticChecker(Visitor, Utils):
         self.visit(ast.init, local_env)  # AssignStmt
         init_lhs_typ = self.visit(ast.init.lhs, local_env)
         if isinstance(init_lhs_typ, IntegerType):
-            raise TypeMismatchInStatement(ast)
+            raise TypeMismatchInStatement(ast.init)
 
         cond = self.visit(ast.cond, local_env)
         if not isinstance(cond, BooleanType):
@@ -397,7 +398,7 @@ class StaticChecker(Visitor, Utils):
         
     def visitWhileStmt(self, ast:WhileStmt, env):
         local_env = [[]] + env
-        cond = self.visit(ast.exp, local_env)
+        cond = self.visit(ast.cond, local_env)
         if not isinstance(cond, BooleanType):
             raise TypeMismatchInStatement(ast)
         
@@ -408,7 +409,7 @@ class StaticChecker(Visitor, Utils):
     def visitDoWhileStmt(self, ast:DoWhileStmt, env):
         local_env = [[]] + env
         self.visit(ast.stmt, local_env)
-        cond = self.visit(ast.exp, local_env)
+        cond = self.visit(ast.cond, local_env)
         
         if not isinstance(cond, BooleanType):
             raise TypeMismatchInStatement(ast)
