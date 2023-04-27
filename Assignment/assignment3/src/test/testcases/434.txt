@@ -1,0 +1,6 @@
+
+        arr : array [5] of integer = {0,1,2,3,4};
+        element : integer = arr[arr[0]];
+        main: function void(){
+        }
+        

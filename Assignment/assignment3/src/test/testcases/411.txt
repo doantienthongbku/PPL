@@ -1,0 +1,5 @@
+
+        main: function void(){}
+        a, b, c, d: auto = 1, 2.5, "My name is Hoa", true;
+        e : integer = 2.5;
+        

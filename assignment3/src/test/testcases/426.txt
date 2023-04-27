@@ -1,7 +1,0 @@
-m: string;
-        foo: function integer(a: integer){
-            m, n: string;
-            m = n;
-        }
-        main: function void(){
-        }

@@ -1,8 +1,0 @@
-m: integer;
-        foo: function integer(a: integer){
-            for (m = 0, m > 3, m + 1) {
-                break;
-            }
-        }
-        main: function void(){
-        }

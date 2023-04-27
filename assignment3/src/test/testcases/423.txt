@@ -1,8 +1,0 @@
-
-        a : integer = 1;
-        b : integer = 2;
-        main: function void() {
-            b: integer = 3;
-            a: integer = 4;
-        }
-        

@@ -1,0 +1,6 @@
+
+        a : float = 1.0;
+        element : integer = a[1.0];
+        main: function void(){
+        }
+        
